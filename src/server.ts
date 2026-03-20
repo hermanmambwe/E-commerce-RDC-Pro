@@ -348,6 +348,11 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Server running at port ${port}`);
-});
+// Export app for Vercel
+export default app;
+
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Server running at port ${port}`);
+  });
+}
