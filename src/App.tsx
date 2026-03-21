@@ -82,6 +82,7 @@ function FloatingWhatsApp() {
 function Header({ onLoginClick }: { onLoginClick: () => void }) {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     return scrollY.onChange((latest) => {
@@ -108,7 +109,8 @@ function Header({ onLoginClick }: { onLoginClick: () => void }) {
             </div>
             <span className={`font-extrabold tracking-tight text-slate-900 transition-all duration-300 ${isScrolled ? 'text-lg' : 'text-xl'}`}>E-commerce RDC Pro</span>
           </div>
-          <nav className="hidden md:flex space-x-8">
+
+          <nav className="hidden lg:flex space-x-8">
             <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="/?page=about">À propos</a>
             <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="/#features">Fonctionnalités</a>
             <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors" href="/#showcase">Modèles</a>
@@ -119,16 +121,60 @@ function Header({ onLoginClick }: { onLoginClick: () => void }) {
               Affiliation
             </a>
           </nav>
+
           <div className="flex items-center gap-4">
             <button 
               onClick={onLoginClick}
-              className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm transition-all shadow-lg shadow-slate-900/20 hover:-translate-y-0.5"
+              className="hidden sm:block bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm transition-all shadow-lg shadow-slate-900/20 hover:-translate-y-0.5"
             >
               Mon Compte
+            </button>
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 text-slate-600 hover:text-primary transition-colors"
+            >
+              <span className="material-symbols-outlined text-2xl">
+                {isMobileMenuOpen ? 'close' : 'menu'}
+              </span>
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-white border-t border-slate-100 overflow-hidden"
+          >
+            <div className="px-4 pt-2 pb-6 space-y-1">
+              <a onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 rounded-xl" href="/?page=about">À propos</a>
+              <a onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 rounded-xl" href="/#features">Fonctionnalités</a>
+              <a onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 rounded-xl" href="/#showcase">Modèles</a>
+              <a onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 rounded-xl" href="/#comparison">Pourquoi nous ?</a>
+              <a onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-base font-bold text-slate-700 hover:bg-slate-50 rounded-xl" href="/#pricing">Tarifs</a>
+              <a onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-base font-bold text-accent-vibrant hover:bg-orange-50 rounded-xl flex items-center gap-2" href="/#affiliate">
+                <span className="material-symbols-outlined text-sm">loyalty</span>
+                Affiliation
+              </a>
+              <div className="pt-4 px-3">
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onLoginClick();
+                  }}
+                  className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-sm shadow-xl"
+                >
+                  Mon Compte
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }
@@ -710,7 +756,7 @@ function Pricing() {
                 </div>
               </div>
               
-              <a className="block w-full bg-white text-slate-900 hover:bg-slate-100 text-center py-4 rounded-full font-bold text-lg transition-all shadow-xl hover:scale-105" href="#contact">
+              <a className="block w-full sm:w-auto sm:inline-block bg-white text-slate-900 hover:bg-slate-100 text-center py-4 px-8 rounded-full font-bold text-lg transition-all shadow-xl hover:scale-105" href="#contact">
                 En profiter maintenant
               </a>
               <p className="text-center text-xs text-slate-500 mt-6">Paiement sécurisé. Installation en 7 jours.</p>
@@ -783,7 +829,7 @@ function Contact() {
                 href="https://wa.me/243837944949"
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-full bg-accent-vibrant hover:bg-orange-600 text-white flex justify-center py-4 sm:py-5 rounded-full font-bold text-base sm:text-lg transition-all shadow-xl shadow-accent-vibrant/20 hover:scale-[1.02] cursor-pointer"
+                className="w-full sm:w-auto sm:px-12 bg-accent-vibrant hover:bg-orange-600 text-white flex justify-center py-4 sm:py-5 rounded-full font-bold text-base sm:text-lg transition-all shadow-xl shadow-accent-vibrant/20 hover:scale-[1.02] cursor-pointer"
               >
                 Envoyer ma demande via WhatsApp
               </a>
@@ -996,10 +1042,10 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
                 <button 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white flex justify-center py-4 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer gap-2 items-center disabled:opacity-50"
+                  className="w-full sm:w-auto sm:px-12 mx-auto bg-slate-900 hover:bg-slate-800 text-white flex justify-center py-4 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer gap-2 items-center disabled:opacity-50"
                 >
                   <span className="material-symbols-outlined text-xl">rocket_launch</span>
-                  {isSubmitting ? 'Traitement...' : 'Activer mon compte Affili'}
+                  {isSubmitting ? 'Traitement...' : 'Activer mon compte Affilié'}
                 </button>
               </div>
             </form>
@@ -3109,12 +3155,6 @@ export default function App() {
   if (showLogin === 'admin') {
     return (
       <div className="relative">
-        <button 
-          onClick={() => setShowLogin(null)}
-          className="fixed top-4 right-4 z-[100] bg-white text-slate-900 px-4 py-2 rounded-full font-bold shadow-lg"
-        >
-          Retour au site
-        </button>
         <AdminLoginForm onLogin={(user) => setLoginState({ role: 'admin', user })} />
       </div>
     );
@@ -3123,12 +3163,6 @@ export default function App() {
   if (showLogin === 'affiliate') {
     return (
       <div className="relative">
-        <button 
-          onClick={() => setShowLogin(null)}
-          className="fixed top-4 right-4 z-[100] bg-white text-slate-900 px-4 py-2 rounded-full font-bold shadow-lg"
-        >
-          Retour au site
-        </button>
         <PartnerPortalAccess onLogin={(user) => setLoginState({ role: 'affiliate', user })} />
       </div>
     );
