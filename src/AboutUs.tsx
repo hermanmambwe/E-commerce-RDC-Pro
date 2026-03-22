@@ -64,7 +64,7 @@ export default function AboutUs() {
             >
               <div className="relative z-10 rounded-[2.5rem] overflow-hidden bg-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] ring-1 ring-slate-200">
                 <img 
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop" 
+                  src="/herman.png" 
                   alt="Herman Mambwe" 
                   className="w-full h-full object-cover aspect-[4/5] grayscale hover:grayscale-0 transition-all duration-700"
                 />

@@ -144,7 +144,7 @@ app.patch('/api/affiliates/:id/track', (req, res) => {
       db.prepare('INSERT INTO lead_details (affiliate_id, client_name, client_phone, event_type) VALUES (?, ?, ?, ?)').run(id, clientName || 'Client Anonyme', clientPhone || '', 'lead');
     } else if (type === 'conversion') {
       // When a sale is confirmed, increment conversions and update revenue
-      db.prepare('UPDATE affiliates SET conversions = conversions + 1, revenue = revenue + 425 WHERE id = ?').run(id);
+      db.prepare('UPDATE affiliates SET conversions = conversions + 1, revenue = revenue + 1125 WHERE id = ?').run(id);
       db.prepare('INSERT INTO lead_details (affiliate_id, client_name, client_phone, event_type) VALUES (?, ?, ?, ?)').run(id, clientName || 'Client Anonyme', clientPhone || '', 'conversion');
     }
     res.json({ success: true });
@@ -216,7 +216,7 @@ app.post('/api/payment-links', (req, res) => {
 
   try {
     const stmt = db.prepare('INSERT INTO payment_links (id, affiliate_id, client_name, client_phone, amount) VALUES (?, ?, ?, ?, ?)');
-    stmt.run(id, affiliate_id, client_name, client_phone, amount || 425);
+    stmt.run(id, affiliate_id, client_name, client_phone, amount || 1125);
     res.json({ id, success: true });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

@@ -78,7 +78,7 @@ db.exec(`
     affiliate_id INTEGER NOT NULL,
     client_name TEXT NOT NULL,
     client_phone TEXT NOT NULL,
-    amount REAL DEFAULT 425,
+    amount REAL DEFAULT 1125,
     status TEXT DEFAULT 'pending',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (affiliate_id) REFERENCES affiliates(id)

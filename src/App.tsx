@@ -213,7 +213,7 @@ function Hero() {
               Lancez votre boutique en ligne <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-indigo-600 animate-pulse">automatisée</span> en RDC.
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed max-w-xl">
-              Encaissez vos clients par M-Pesa, Airtel et Orange Money. Offre spéciale à <span className="font-bold text-slate-900">$425</span> incluant le nom de domaine offert.
+              Encaissez vos clients par M-Pesa, Airtel et Orange Money. Offre spéciale à <span className="font-bold text-slate-900">$1,125</span> incluant le nom de domaine offert.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button className="w-full sm:w-auto bg-gradient-to-r from-accent-vibrant to-orange-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 hover:shadow-2xl hover:shadow-accent-vibrant/40 flex items-center justify-center gap-2 relative overflow-hidden group">
@@ -605,7 +605,7 @@ function ComparisonTable() {
     },
     { 
       feature: "Coût de départ", 
-      rdc: "$425 (Tout inclus)", 
+      rdc: "$1,125 (Tout inclus)", 
       dev: "$1500 - $3500+", 
       global: "$29/mois + Apps payantes" 
     },
@@ -721,7 +721,7 @@ function Pricing() {
                 <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
                   <span className="material-symbols-outlined text-slate-600 text-sm font-bold">functions</span>
                 </div>
-                <span className="text-slate-900 font-bold text-lg">Total standard : $425</span>
+                <span className="text-slate-900 font-bold text-lg">Total standard : $1,125</span>
               </li>
             </ul>
           </div>
@@ -737,8 +737,8 @@ function Pricing() {
             <div className="relative z-10 mt-4 sm:mt-0">
               <p className="text-slate-400 uppercase font-bold text-xs tracking-widest mb-4">Premiers arrivés, premiers servis</p>
               <div className="flex items-baseline gap-3 mb-6">
-                <span className="text-5xl sm:text-6xl font-black tracking-tighter">$425</span>
-                <span className="text-slate-500 line-through text-xl sm:text-2xl font-medium">$500</span>
+                <span className="text-5xl sm:text-6xl font-black tracking-tighter">$1,125</span>
+                <span className="text-slate-500 line-through text-xl sm:text-2xl font-medium">$1,500</span>
               </div>
               <p className="text-slate-300 mb-8 sm:mb-10 text-base sm:text-lg">
                 Prix réduit pour les <span className="text-white font-bold border-b border-accent-vibrant">6 premiers clients</span> de ce mois.
@@ -963,7 +963,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
                 </div>
                 <div>
                   <h4 className="text-white font-bold text-lg mb-1">Encaissez via Mobile Money</h4>
-                  <p className="text-slate-400 text-sm">Vous recevez automatiquement <span className="text-green-400 font-bold">24% de commission ($102)</span> sur votre M-Pesa/Airtel  chaque vente.</p>
+                  <p className="text-slate-400 text-sm">Vous recevez automatiquement <span className="text-green-400 font-bold">20% de commission ($225)</span> sur votre M-Pesa/Airtel à chaque vente.</p>
                 </div>
               </div>
             </div>
@@ -1875,7 +1875,7 @@ function AdminDashboard() {
   // Advanced Platform Settings
   const [settings, setSettings] = useState({
     platformName: 'E-commerce RDC Pro',
-    commissionRate: 102,
+    commissionRate: 225,
     supportEmail: 'admin@rdcpro.com',
     allowAutoActivation: false,
     payoutMinimum: 50,
