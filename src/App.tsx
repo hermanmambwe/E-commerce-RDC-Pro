@@ -216,7 +216,7 @@ function Hero() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button className="w-full sm:w-auto bg-gradient-to-r from-accent-vibrant to-orange-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 rounded-full font-bold text-lg transition-all hover:scale-105 hover:shadow-2xl hover:shadow-accent-vibrant/40 flex items-center justify-center gap-2 relative overflow-hidden group">
-                <span className="relative z-10">Réserver ma remise de 24%</span>
+                <span className="relative z-10">Réserver ma remise</span>
                 <span className="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out z-0"></div>
               </button>
