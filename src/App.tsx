@@ -57,22 +57,22 @@ function CountdownTimer() {
 
 function FloatingWhatsApp() {
   return (
-    <a 
-      href="https://wa.me/243837944949" 
-      target="_blank" 
+    <a
+      href="https://wa.me/243837944949"
+      target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-[100] group flex items-center justify-center"
       aria-label="Contactez-nous sur WhatsApp"
     >
       <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-75"></div>
       <div className="relative bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30 ring-4 ring-white transition-transform duration-300 group-hover:scale-110">
-        <svg 
-          className="w-8 h-8" 
-          fill="currentColor" 
-          viewBox="0 0 24 24" 
+        <svg
+          className="w-8 h-8"
+          fill="currentColor"
+          viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.888-.788-1.489-1.761-1.663-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
         </svg>
       </div>
     </a>
@@ -91,15 +91,14 @@ function Header({ onLoginClick }: { onLoginClick: () => void }) {
   }, [scrollY]);
 
   return (
-    <motion.header 
+    <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`sticky top-0 w-full z-50 transition-all duration-300 border-b ${
-        isScrolled 
-          ? 'bg-white/90 backdrop-blur-xl border-slate-200/50 shadow-sm py-2' 
-          : 'bg-transparent border-transparent py-4'
-      }`}
+      className={`sticky top-0 w-full z-50 transition-all duration-300 border-b ${isScrolled
+        ? 'bg-white/90 backdrop-blur-xl border-slate-200/50 shadow-sm py-2'
+        : 'bg-transparent border-transparent py-4'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -123,13 +122,13 @@ function Header({ onLoginClick }: { onLoginClick: () => void }) {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={onLoginClick}
               className="hidden sm:block bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm transition-all shadow-lg shadow-slate-900/20 hover:-translate-y-0.5"
             >
               Mon Compte
             </button>
-            <button 
+            <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 text-slate-600 hover:text-primary transition-colors"
             >
@@ -161,7 +160,7 @@ function Header({ onLoginClick }: { onLoginClick: () => void }) {
                 Affiliation
               </a>
               <div className="pt-4 px-3">
-                <button 
+                <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     onLoginClick();
@@ -196,7 +195,7 @@ function Hero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -231,7 +230,7 @@ function Hero() {
               <p className="text-sm text-slate-500 font-medium">Installation complète en moins de <span className="text-slate-900 font-bold">7 jours ouvrés</span>.</p>
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.85, rotate: -2 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -239,20 +238,20 @@ function Hero() {
             className="relative lg:ml-10"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent rounded-[2.5rem] transform translate-x-4 translate-y-4 -z-10"></div>
-            
+
             <div className="animate-float">
               <div className="relative rounded-[2.5rem] shadow-2xl shadow-primary/20 ring-1 ring-slate-900/10 w-full aspect-[4/3] overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                <motion.img 
+                <motion.img
                   style={{ scale: imageScale }}
-                  alt="Smartphone displaying a modern e-commerce dashboard" 
-                  className="w-full h-full object-cover" 
-                  src="/hero_payment.png" 
-                  referrerPolicy="no-referrer" 
+                  alt="Smartphone displaying a modern e-commerce dashboard"
+                  className="w-full h-full object-cover"
+                  src="/hero_payment.png"
+                  referrerPolicy="no-referrer"
                 />
               </div>
             </div>
-            
+
             {/* Floating Badge */}
             <motion.div style={{ y: badgeY }} className="absolute -bottom-4 sm:-bottom-6 -left-4 sm:-left-8 z-20 w-[90%] sm:w-auto">
               <div className="bg-white/80 backdrop-blur-xl p-3 sm:p-4 rounded-2xl shadow-2xl shadow-slate-900/10 ring-1 ring-white/50 flex items-center gap-3 sm:gap-4 animate-float-delayed">
@@ -269,7 +268,7 @@ function Hero() {
         </div>
 
         {/* Trust Badges */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -315,19 +314,19 @@ function Partners() {
           <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">Intégration native avec les leaders</h2>
         </div>
       </div>
-      
+
       {/* Infinite Scrolling Ticker */}
       <div className="relative flex overflow-hidden group py-4">
         {/* Stronger Side Fades */}
         <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-white via-white/80 to-transparent z-20 pointer-events-none"></div>
         <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-white via-white/80 to-transparent z-20 pointer-events-none"></div>
-        
+
         <div className="flex w-max animate-marquee space-x-8 md:space-x-12 px-8 md:px-12 group-hover:[animation-play-state:paused]">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="flex gap-8 md:gap-12">
               {partners.map((partner, index) => (
-                <div 
-                  key={`${i}-${index}`} 
+                <div
+                  key={`${i}-${index}`}
                   className="flex items-center gap-5 p-4 md:p-6 bg-white/40 backdrop-blur-xl border border-white/20 rounded-[2rem] shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 cursor-pointer group/card hover:-translate-y-2 hover:rotate-1"
                 >
                   <div className={`w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br ${partner.color} rounded-2xl flex items-center justify-center text-white shadow-lg transform transition-transform duration-500 group-hover/card:scale-110 group-hover/card:rotate-6`}>
@@ -379,7 +378,7 @@ function HowItWorks() {
 
   return (
     <section className="py-24 bg-slate-50" id="how-it-works">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -393,14 +392,14 @@ function HowItWorks() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 relative">
           {/* Ligne de connexion pour desktop avec barre de progression */}
           <div className="hidden lg:block absolute top-[4.5rem] left-[12.5%] w-[75%] h-1 bg-slate-200 z-0 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-primary transition-all duration-700 ease-in-out"
               style={{ width: `${((activeStep - 1) / 3) * 100}%` }}
             ></div>
           </div>
 
           {steps.map((step) => (
-            <div 
+            <div
               key={step.id}
               className="relative z-10 flex flex-col items-center text-center group cursor-pointer"
               onMouseEnter={() => setActiveStep(step.id)}
@@ -430,7 +429,7 @@ function Features() {
   return (
     <section className="py-24 bg-white" id="features">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -440,7 +439,7 @@ function Features() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-extrabold tracking-tight text-slate-900 mb-6">Fonctionnalités Clés</h2>
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed">Tout ce dont vous avez besoin pour propulser votre commerce en ligne, pensé spécialement pour les réalités du marché congolais.</p>
         </motion.div>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -460,7 +459,7 @@ function Features() {
               <p className="text-sm sm:text-base text-slate-800"><strong className="text-slate-900 font-extrabold">Bénéfice :</strong> Vous savez exactement ce qui se vend le mieux sans utiliser de cahiers compliqués, vous faisant gagner un temps précieux chaque jour.</p>
             </div>
           </div>
-          
+
           <div className="bg-white/60 backdrop-blur-lg p-8 sm:p-10 rounded-[2rem] ring-1 ring-slate-900/5 shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 hover:ring-primary/20 transition-all duration-500 group relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0 pointer-events-none"></div>
             <div className="relative z-10 w-20 h-20 bg-white rounded-2xl flex items-center justify-center mb-8 shadow-md ring-1 ring-slate-900/5 group-hover:bg-gradient-to-br group-hover:from-primary group-hover:to-primary-dark group-hover:text-white transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
@@ -563,10 +562,10 @@ function ShowcaseGallery() {
               className="group cursor-pointer"
             >
               <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-slate-900/10 mb-6">
-                <img 
-                  src={tpl.image} 
-                  alt={tpl.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                <img
+                  src={tpl.image}
+                  alt={tpl.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
                   <div className="flex flex-wrap gap-2 mb-4">
@@ -597,35 +596,35 @@ function ShowcaseGallery() {
 
 function ComparisonTable() {
   const comparisons = [
-    { 
-      feature: "Paiements Mobile Money", 
-      rdc: "Natif & Automatisé (M-Pesa, Airtel, Orange)", 
-      dev: "Complexe & Coûteux à intégrer", 
-      global: "Non supporté nativement" 
+    {
+      feature: "Paiements Mobile Money",
+      rdc: "Natif & Automatisé (M-Pesa, Airtel, Orange)",
+      dev: "Complexe & Coûteux à intégrer",
+      global: "Non supporté nativement"
     },
-    { 
-      feature: "Coût de départ", 
-      rdc: "$1,125 (Tout inclus)", 
-      dev: "$1500 - $3500+", 
-      global: "$29/mois + Apps payantes" 
+    {
+      feature: "Coût de départ",
+      rdc: "$1,125 (Tout inclus)",
+      dev: "$1500 - $3500+",
+      global: "$29/mois + Apps payantes"
     },
-    { 
-      feature: "Délais de livraison", 
-      rdc: "7 jours ouvrés", 
-      dev: "1 à 3 mois", 
-      global: "Fait maison (heures/jours)" 
+    {
+      feature: "Délais de livraison",
+      rdc: "7 jours ouvrés",
+      dev: "1 à 3 mois",
+      global: "Fait maison (heures/jours)"
     },
-    { 
-      feature: "Maintenance", 
-      rdc: "Inclus à vie", 
-      dev: "Souvent payante par heure", 
-      global: "Abonnement mensuel requis" 
+    {
+      feature: "Maintenance",
+      rdc: "Inclus à vie",
+      dev: "Souvent payante par heure",
+      global: "Abonnement mensuel requis"
     },
-    { 
-      feature: "Adapté au marché RDC", 
-      rdc: "Oui (Communes, Devises, SMS)", 
-      dev: "Selon le développeur", 
-      global: "Standard international uniquement" 
+    {
+      feature: "Adapté au marché RDC",
+      rdc: "Oui (Communes, Devises, SMS)",
+      dev: "Selon le développeur",
+      global: "Standard international uniquement"
     }
   ];
 
@@ -666,7 +665,7 @@ function ComparisonTable() {
             </table>
           </div>
         </div>
-        
+
         <div className="mt-12 p-8 bg-primary/5 rounded-[2rem] border border-primary/10 flex flex-col md:flex-row items-center gap-6 justify-between">
           <p className="text-slate-800 font-medium text-lg">
             Gagnez du temps, de l'argent et évitez les maux de tête techniques.
@@ -683,7 +682,7 @@ function ComparisonTable() {
 function Pricing() {
   return (
     <section className="py-32 bg-white" id="pricing">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -701,7 +700,7 @@ function Pricing() {
                 <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
                   <span className="material-symbols-outlined text-green-600 text-sm font-bold">check</span>
                 </div>
-                <span className="text-slate-700 font-medium">Licence Pro à vie : <span className="text-slate-900 font-bold">$300</span></span>
+                <span className="text-slate-700 font-medium">Licence Pro à vie : <span className="text-slate-900 font-bold">$1000</span></span>
               </li>
               <li className="flex items-center gap-4">
                 <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
@@ -725,15 +724,15 @@ function Pricing() {
               </li>
             </ul>
           </div>
-          
+
           <div className="bg-slate-950 text-white p-8 sm:p-10 lg:p-12 rounded-[2.5rem] sm:rounded-[3rem] shadow-2xl shadow-accent-vibrant/20 ring-1 ring-white/10 relative overflow-hidden animate-glow">
             {/* Glow effect */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-accent-vibrant/20 blur-[100px] pointer-events-none"></div>
-            
+
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 bg-gradient-to-r from-accent-vibrant to-orange-500 text-white px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold tracking-wide shadow-lg shadow-accent-vibrant/40">
               OFFRE LIMITÉE -15%
             </div>
-            
+
             <div className="relative z-10 mt-4 sm:mt-0">
               <p className="text-slate-400 uppercase font-bold text-xs tracking-widest mb-4">Premiers arrivés, premiers servis</p>
               <div className="flex items-baseline gap-3 mb-6">
@@ -743,7 +742,7 @@ function Pricing() {
               <p className="text-slate-300 mb-8 sm:mb-10 text-base sm:text-lg">
                 Prix réduit pour les <span className="text-white font-bold border-b border-accent-vibrant">6 premiers clients</span> de ce mois.
               </p>
-              
+
               <div className="mb-10">
                 <div className="flex justify-between text-xs font-medium text-slate-400 mb-2">
                   <span>Places disponibles</span>
@@ -755,7 +754,7 @@ function Pricing() {
                   </div>
                 </div>
               </div>
-              
+
               <a className="block w-full sm:w-auto sm:inline-block bg-white text-slate-900 hover:bg-slate-100 text-center py-4 px-8 rounded-full font-bold text-lg transition-all shadow-xl hover:scale-105" href="#contact">
                 En profiter maintenant
               </a>
@@ -771,7 +770,7 @@ function Pricing() {
 function Contact() {
   return (
     <section className="py-24 bg-slate-50" id="contact">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -825,13 +824,13 @@ function Contact() {
               </div>
             </div>
             <div className="pt-4">
-              <a 
+              <a
                 href="https://wa.me/243837944949"
-                target="_blank" 
+                target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto sm:px-12 bg-accent-vibrant hover:bg-orange-600 text-white flex justify-center py-4 sm:py-5 rounded-full font-bold text-base sm:text-lg transition-all shadow-xl shadow-accent-vibrant/20 hover:scale-[1.02] cursor-pointer"
               >
-                Envoyer ma demande via WhatsApp
+                Envoyer ma demande
               </a>
               <p className="text-center text-xs sm:text-sm text-slate-500 mt-4 sm:mt-6">En soumettant ce formulaire, vous acceptez d'être contacté via WhatsApp par notre équipe commerciale.</p>
             </div>
@@ -843,12 +842,12 @@ function Contact() {
 }
 
 function Affiliate({ onSuccess }: { onSuccess: () => void }) {
-  const [formData, setFormData] = useState({ 
-    name: '', 
+  const [formData, setFormData] = useState({
+    name: '',
     email: '',
     confirmEmail: '',
-    phone: '', 
-    method: 'Bouche-à-oreille (Amis / Famille)' 
+    phone: '',
+    method: 'Bouche-à-oreille (Amis / Famille)'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -893,7 +892,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
   if (success) {
     return (
       <section className="py-24 bg-slate-900 text-center text-white" id="affiliate">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-7xl mx-auto px-4"
@@ -901,7 +900,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
           <span className="material-symbols-outlined text-6xl text-green-400 mb-6">check_circle</span>
           <h2 className="text-4xl font-display font-black mb-4 tracking-tight">Demande envoyée avec succès !</h2>
           <p className="text-slate-300 text-lg mb-8">Votre demande est en cours d'examen par l'administration. Si elle est approuvée, vous recevrez votre Code d'Accès Unique très prochainement.</p>
-          <button 
+          <button
             onClick={onSuccess}
             className="bg-white text-slate-900 px-8 py-3 rounded-xl font-bold hover:bg-slate-100 transition-all"
           >
@@ -917,8 +916,8 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-vibrant/10 rounded-full blur-[120px] pointer-events-none translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none -translate-x-1/2 translate-y-1/2"></div>
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -937,7 +936,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
             <p className="text-slate-300 text-lg sm:text-xl leading-relaxed mb-8">
               Transformez votre rseau en revenus. Aidez d'autres commerants  se digitaliser et touchez une commission gnreuse et immdiate sur chaque installation russie.
             </p>
-            
+
             <div className="space-y-6 mb-10">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 border border-white/5">
@@ -968,11 +967,11 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-2xl ring-1 ring-slate-900/5 lg:translate-y-4">
             <h3 className="text-2xl font-bold text-slate-900 mb-2">Devenir Partenaire</h3>
             <p className="text-slate-600 mb-8">Rejoignez-nous et commencez  gnrer des revenus ds aujourd'hui.</p>
-            
+
             <form className="space-y-5" onSubmit={handleSubmit}>
               {error && (
                 <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl text-sm mb-4 font-medium">
@@ -982,10 +981,10 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-sm font-bold text-slate-900">Nom Complet</label>
-                  <input 
-                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium" 
-                    placeholder="Votre nom" 
-                    type="text" 
+                  <input
+                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium"
+                    placeholder="Votre nom"
+                    type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -993,10 +992,10 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-900">Adresse Email</label>
-                  <input 
-                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium" 
-                    placeholder="Ex: nom@example.com" 
-                    type="email" 
+                  <input
+                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium"
+                    placeholder="Ex: nom@example.com"
+                    type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -1004,10 +1003,10 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-900">Confirmer Email</label>
-                  <input 
-                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium" 
-                    placeholder="Répétez votre email" 
-                    type="email" 
+                  <input
+                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium"
+                    placeholder="Répétez votre email"
+                    type="email"
                     required
                     value={formData.confirmEmail}
                     onChange={(e) => setFormData({ ...formData, confirmEmail: e.target.value })}
@@ -1015,10 +1014,10 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-sm font-bold text-slate-900">Numéro WhatsApp</label>
-                  <input 
-                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium" 
-                    placeholder="+243 ..." 
-                    type="tel" 
+                  <input
+                    className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-900 font-medium"
+                    placeholder="+243 ..."
+                    type="tel"
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -1027,7 +1026,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-900">Comment comptez-vous promouvoir ?</label>
-                <select 
+                <select
                   className="w-full rounded-xl border-0 ring-1 ring-slate-200 bg-slate-50 focus:ring-2 focus:ring-accent-vibrant focus:bg-white transition-all px-4 py-3 text-slate-600 cursor-pointer"
                   value={formData.method}
                   onChange={(e) => setFormData({ ...formData, method: e.target.value })}
@@ -1039,7 +1038,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
                 </select>
               </div>
               <div className="pt-4">
-                <button 
+                <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full sm:w-auto sm:px-12 mx-auto bg-slate-900 hover:bg-slate-800 text-white flex justify-center py-4 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer gap-2 items-center disabled:opacity-50"
@@ -1076,7 +1075,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
   useEffect(() => {
     if (showSettings && data?.affiliate) {
       setSettingsName(data.affiliate.name || '');
-      setSettingsAvatar(''); 
+      setSettingsAvatar('');
     }
   }, [showSettings, data?.affiliate]);
 
@@ -1114,7 +1113,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
         const res = await fetch(`/api/notifications/${affiliateId}`);
         const data = await res.json();
         if (Array.isArray(data)) setNotifications(data);
-      } catch (e) {}
+      } catch (e) { }
     };
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 5000);
@@ -1127,7 +1126,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
     try {
       await fetch(`/api/notifications/${id}/read`, { method: 'POST' });
       setNotifications(notifications.map(n => n.id === id ? { ...n, is_read: 1 } : n));
-    } catch(e) {}
+    } catch (e) { }
   };
 
   const fetchData = async () => {
@@ -1203,7 +1202,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
 
   if (affiliate && !affiliate.has_completed_onboarding) {
     return (
-      <AffiliateOnboarding 
+      <AffiliateOnboarding
         affiliateId={affiliate.id}
         affiliateName={affiliate.name}
         onComplete={() => {
@@ -1232,10 +1231,10 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
             </div>
           </div>
           <div className="flex items-center gap-6">
-            
+
             {/* Notifications Bell */}
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative p-2 text-slate-400 hover:text-slate-900 transition-colors"
               >
@@ -1247,7 +1246,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
 
               <AnimatePresence>
                 {showNotifications && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -1262,8 +1261,8 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                         <div className="p-6 text-center text-slate-500 text-sm">Aucune notification</div>
                       ) : (
                         notifications.map(n => (
-                          <div 
-                            key={n.id} 
+                          <div
+                            key={n.id}
                             onClick={() => !n.is_read && handleMarkAsRead(n.id)}
                             className={`p-4 border-b border-slate-50 flex gap-3 cursor-pointer transition-colors hover:bg-slate-50 ${!n.is_read ? 'bg-blue-50/30' : 'opacity-70'}`}
                           >
@@ -1287,7 +1286,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Connecté</span>
             </div>
-            <button 
+            <button
               onClick={onLogout}
               className="group flex items-center gap-2 text-slate-400 hover:text-slate-900 transition-colors"
             >
@@ -1304,14 +1303,14 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
       <AnimatePresence>
         {showSettings && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm cursor-pointer"
               onClick={() => setShowSettings(false)}
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -1324,7 +1323,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                     <span className="material-symbols-outlined text-sm">close</span>
                   </button>
                 </div>
-                
+
                 <form onSubmit={handleSaveSettings} className="space-y-8">
                   {/* Avatar Upload */}
                   <div className="flex flex-col items-center justify-center pt-2">
@@ -1348,8 +1347,8 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">Nom d'affichage</label>
                     <div className="relative">
                       <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg">badge</span>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={settingsName}
                         onChange={(e) => setSettingsName(e.target.value)}
                         required
@@ -1359,13 +1358,13 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                     </div>
                   </div>
 
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={isSavingSettings}
                     className="w-full bg-slate-900 text-white rounded-xl py-4 font-bold text-sm hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/20 hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                   >
                     {isSavingSettings ? (
-                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     ) : (
                       <>
                         <span className="material-symbols-outlined text-lg">check_circle</span>
@@ -1439,14 +1438,14 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
             </div>
             <p className="text-3xl font-black text-white leading-none tracking-tight">${(affiliate?.revenue || 0).toLocaleString()}</p>
             <div className="mt-6 space-y-3">
-              <button 
+              <button
                 onClick={() => setShowRequestForm(true)}
                 className="w-full bg-white text-slate-900 py-2.5 rounded-lg font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-sm">payout</span>
                 Retirer Gains
               </button>
-              <button 
+              <button
                 onClick={() => setShowLinkModal(true)}
                 className="w-full bg-slate-800 text-white/80 py-2.5 rounded-lg font-bold text-[10px] uppercase tracking-widest hover:text-white transition-all border border-white/5 flex items-center justify-center gap-2"
               >
@@ -1467,13 +1466,13 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                   <span className="material-symbols-outlined text-indigo-600">stars</span>
                   <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Outils de Promotion</h3>
                 </div>
-                
+
                 <div className="flex flex-col md:flex-row gap-6">
                   <div className="flex-1 p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Votre Code Promo Unique</p>
                     <div className="flex items-center justify-between gap-4">
                       <code className="text-2xl font-black text-slate-900 tracking-[0.2em]">{affiliate?.promo_code || '---'}</code>
-                      <button 
+                      <button
                         onClick={() => {
                           navigator.clipboard.writeText(affiliate?.promo_code || '');
                           setMessage({ text: 'Code copié !', type: 'success' });
@@ -1484,7 +1483,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="flex-1 p-6 bg-indigo-600 rounded-2xl text-white shadow-xl shadow-indigo-100">
                     <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-4">Commission Partenaire</p>
                     <div className="flex items-baseline gap-2">
@@ -1518,7 +1517,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                 Activités Récentes
               </h3>
             </div>
-            
+
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden min-h-[400px]">
               {leads.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-20 text-center opacity-40">
@@ -1542,11 +1541,10 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                           <p className="text-[10px] font-medium text-slate-400 mt-1">{lead.client_phone}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest border ${
-                            lead.event_type === 'conversion' 
-                              ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
-                              : 'bg-indigo-50 text-indigo-600 border-indigo-100'
-                          }`}>
+                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest border ${lead.event_type === 'conversion'
+                            ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+                            : 'bg-indigo-50 text-indigo-600 border-indigo-100'
+                            }`}>
                             {lead.event_type === 'conversion' ? 'Payé' : 'Visite'}
                           </span>
                         </td>
@@ -1571,7 +1569,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                 Historique Retraits
               </h3>
             </div>
-            
+
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden min-h-[400px]">
               {payouts.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-20 text-center opacity-40">
@@ -1597,11 +1595,10 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{p.payment_method}</p>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest border ${
-                            p.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                          <span className={`px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-widest border ${p.status === 'paid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
                             p.status === 'rejected' ? 'bg-rose-50 text-rose-600 border-rose-100' :
-                            'bg-amber-50 text-amber-600 border-amber-100'
-                          }`}>
+                              'bg-amber-50 text-amber-600 border-amber-100'
+                            }`}>
                             {p.status === 'pending' ? 'En attente' : p.status === 'paid' ? 'Payé' : 'Refusé'}
                           </span>
                         </td>
@@ -1619,14 +1616,14 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
         {/* Payout Request Modal */}
         {showRequestForm && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 text-left">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
               onClick={() => setShowRequestForm(false)}
             />
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -1634,12 +1631,12 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
             >
               <h3 className="text-2xl font-bold text-slate-900 mb-2">Demander un Retrait</h3>
               <p className="text-sm text-slate-500 mb-8 italic">Vos revenus seront transférés après validation administrative.</p>
-              
+
               <form onSubmit={handlePayoutRequest} className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Montant ($)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="0.01"
                     className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-bold text-slate-900"
                     placeholder="0.00"
@@ -1651,8 +1648,8 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Méthode de réception</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-bold text-slate-900"
                     placeholder="Ex: M-Pesa - 0820000000"
                     value={payoutMethod}
@@ -1660,7 +1657,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                     required
                   />
                 </div>
-                <button 
+                <button
                   type="submit"
                   className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 mt-4"
                 >
@@ -1674,14 +1671,14 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
         {/* Generate Link Modal */}
         {showLinkModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 text-left">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
               onClick={() => setShowLinkModal(false)}
             />
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -1689,31 +1686,31 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
             >
               <h3 className="text-2xl font-bold text-slate-900 mb-2 font-display">Générer un Lien</h3>
               <p className="text-sm text-slate-500 mb-8 italic">Préparez un accès direct au paiement pour votre prospect.</p>
-              
+
               <form onSubmit={handleGenerateLink} className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Filiation Client</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-bold text-slate-900"
                     placeholder="Nom complet du client"
                     value={linkForm.client_name}
-                    onChange={(e) => setLinkForm({...linkForm, client_name: e.target.value})}
+                    onChange={(e) => setLinkForm({ ...linkForm, client_name: e.target.value })}
                     required
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Contact WhatsApp</label>
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
                     className="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-bold text-slate-900"
                     placeholder="+243 ..."
                     value={linkForm.client_phone}
-                    onChange={(e) => setLinkForm({...linkForm, client_phone: e.target.value})}
+                    onChange={(e) => setLinkForm({ ...linkForm, client_phone: e.target.value })}
                     required
                   />
                 </div>
-                <button 
+                <button
                   type="submit"
                   className="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 mt-4"
                 >
@@ -1728,7 +1725,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
         {generatedLink && (
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
             <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" />
-            <motion.div 
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               className="bg-white rounded-[2.5rem] p-12 max-w-xl w-full relative z-10 shadow-3xl text-center border border-slate-100"
@@ -1738,12 +1735,12 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
               </div>
               <h3 className="text-2xl font-black text-slate-900 mb-2">Lien Prêt !</h3>
               <p className="text-slate-500 mb-8 font-medium">Partagez ce lien avec votre client pour finaliser la vente.</p>
-              
+
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 mb-8 flex items-center justify-between gap-4">
                 <code className="text-xs font-bold text-slate-600 truncate flex-1 block text-left">
                   {window.location.host}/p/{generatedLink}
                 </code>
-                <button 
+                <button
                   onClick={() => {
                     navigator.clipboard.writeText(`${window.location.host}/p/${generatedLink}`);
                     setMessage({ text: 'Lien copié !', type: 'success' });
@@ -1753,8 +1750,8 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                   <span className="material-symbols-outlined text-sm">content_copy</span>
                 </button>
               </div>
-              
-              <button 
+
+              <button
                 onClick={() => setGeneratedLink(null)}
                 className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-slate-800 transition-all"
               >
@@ -1768,19 +1765,18 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
       {/* Message Notification */}
       <AnimatePresence>
         {message.text && (
-          <motion.div 
+          <motion.div
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
-            className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[120] px-6 py-4 rounded-2xl shadow-2xl border flex items-center gap-3 backdrop-blur-xl ${
-              message.type === 'success' ? 'bg-emerald-900/90 text-white border-white/10' : 'bg-rose-900/90 text-white border-white/10'
-            }`}
+            className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[120] px-6 py-4 rounded-2xl shadow-2xl border flex items-center gap-3 backdrop-blur-xl ${message.type === 'success' ? 'bg-emerald-900/90 text-white border-white/10' : 'bg-rose-900/90 text-white border-white/10'
+              }`}
           >
             <span className="material-symbols-outlined text-xl">
               {message.type === 'success' ? 'check_circle' : 'error'}
             </span>
             <p className="text-[10px] font-bold uppercase tracking-widest">{message.text}</p>
-            <button 
+            <button
               onClick={() => setMessage({ text: '', type: '' })}
               className="ml-4 w-6 h-6 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors"
             >
@@ -1798,7 +1794,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
 
 function ExecutiveCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={`bg-white border border-slate-200 shadow-[0_1px_3px_0_rgba(0,0,0,0.02),0_1px_2px_-1px_rgba(0,0,0,0.03)] rounded-2xl ${className}`}
@@ -1812,7 +1808,7 @@ function ExecutiveChart({ data, title, color = "#4f46e5" }: { data: number[], ti
   const max = Math.max(...data, 1);
   const steps = 7;
   const points = data.map((v, i) => `${(i / (data.length - 1)) * 100},${90 - (v / max) * 80}`).join(' ');
-  
+
   return (
     <ExecutiveCard className="p-6">
       <div className="flex justify-between items-start mb-6">
@@ -1846,13 +1842,13 @@ function ExecutiveChart({ data, title, color = "#4f46e5" }: { data: number[], ti
           <polyline fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" points={points} />
           {/* Interactive Dots */}
           {data.map((v, i) => (
-            <circle 
-              key={i} 
-              cx={(i / (data.length - 1)) * 100} 
-              cy={90 - (v / max) * 80} 
-              r="1.2" 
-              fill="white" 
-              stroke={color} 
+            <circle
+              key={i}
+              cx={(i / (data.length - 1)) * 100}
+              cy={90 - (v / max) * 80}
+              r="1.2"
+              fill="white"
+              stroke={color}
               strokeWidth="1.5"
               className="hover:r-2 transition-all cursor-crosshair"
             />
@@ -1957,8 +1953,8 @@ function AdminDashboard() {
   };
 
   const filteredAffiliates = affiliates.filter(aff => {
-    const matchesSearch = aff.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         aff.phone.includes(searchQuery);
+    const matchesSearch = aff.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      aff.phone.includes(searchQuery);
     const matchesStatus = filterStatus === 'all' || aff.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -2006,8 +2002,8 @@ function AdminDashboard() {
               onClick={() => setActiveModule(item.id as any)}
               className={`
                 w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative
-                ${activeModule === item.id 
-                  ? 'bg-indigo-50 text-indigo-700 font-semibold' 
+                ${activeModule === item.id
+                  ? 'bg-indigo-50 text-indigo-700 font-semibold'
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}
               `}
             >
@@ -2023,7 +2019,7 @@ function AdminDashboard() {
         </nav>
 
         <div className="p-4 border-t border-slate-100">
-          <button 
+          <button
             className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-all group"
             onClick={() => setActiveModule('profile')}
           >
@@ -2046,7 +2042,7 @@ function AdminDashboard() {
         {/* Executive Header */}
         <header className="h-20 sticky top-0 z-30 px-8 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-slate-200/60">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="p-1.5 hover:bg-slate-100 rounded-md text-slate-500 transition-colors"
             >
@@ -2056,11 +2052,11 @@ function AdminDashboard() {
             <div>
               <h2 className="text-sm font-bold text-slate-900">
                 {activeModule === 'overview' ? 'Tableau de bord' :
-                 activeModule === 'affiliates' ? 'Partenaires' : 
-                 activeModule === 'payouts' ? 'Versements' :
-                 activeModule === 'chats' ? 'Support Chat' : 
-                 activeModule === 'profile' ? 'Profil' : 
-                 activeModule === 'config' ? 'Paiements' : 'Paramètres'}
+                  activeModule === 'affiliates' ? 'Partenaires' :
+                    activeModule === 'payouts' ? 'Versements' :
+                      activeModule === 'chats' ? 'Support Chat' :
+                        activeModule === 'profile' ? 'Profil' :
+                          activeModule === 'config' ? 'Paiements' : 'Paramètres'}
               </h2>
             </div>
           </div>
@@ -2070,7 +2066,7 @@ function AdminDashboard() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Live Engine</span>
             </div>
-            <button 
+            <button
               onClick={() => { fetchAffiliates(); fetchPayouts(); }}
               className="w-10 h-10 hover:bg-slate-50 rounded-lg flex items-center justify-center transition-all border border-slate-200 text-slate-500"
             >
@@ -2174,8 +2170,8 @@ function AdminDashboard() {
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-4">
                   <div className="relative w-full md:w-96">
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       placeholder="Filtrer par nom..."
                       className="w-full pl-10 pr-4 py-2 text-sm rounded-lg bg-white border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 transition-all font-medium"
                       value={searchQuery}
@@ -2187,9 +2183,8 @@ function AdminDashboard() {
                       <button
                         key={s}
                         onClick={() => setFilterStatus(s)}
-                        className={`px-4 py-1.5 rounded-md text-[11px] font-bold tracking-wider transition-all ${
-                          filterStatus === s ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
-                        }`}
+                        className={`px-4 py-1.5 rounded-md text-[11px] font-bold tracking-wider transition-all ${filterStatus === s ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                          }`}
                       >
                         {s === 'all' ? 'Tous' : s === 'pending' ? 'Attente' : 'Actifs'}
                       </button>
@@ -2210,58 +2205,58 @@ function AdminDashboard() {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {loading ? (
-                          <tr><td colSpan={4} className="p-20 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">Traitement des données...</td></tr>
-                        ) : filteredAffiliates.length === 0 ? (
-                          <tr><td colSpan={4} className="p-20 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">Aucun enregistrement</td></tr>
-                        ) : (
-                          filteredAffiliates.map((aff) => (
-                            <tr key={aff.id} className="hover:bg-slate-50/50 transition-colors group">
-                              <td className="px-6 py-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm">{aff.name.charAt(0)}</div>
-                                  <div>
-                                    <p className="font-bold text-slate-900 text-sm">{aff.name}</p>
-                                    <p className="text-[10px] font-medium text-slate-400 mt-0.5">{aff.phone}</p>
-                                  </div>
+                        <tr><td colSpan={4} className="p-20 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">Traitement des données...</td></tr>
+                      ) : filteredAffiliates.length === 0 ? (
+                        <tr><td colSpan={4} className="p-20 text-center text-slate-400 text-xs font-bold uppercase tracking-widest">Aucun enregistrement</td></tr>
+                      ) : (
+                        filteredAffiliates.map((aff) => (
+                          <tr key={aff.id} className="hover:bg-slate-50/50 transition-colors group">
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm">{aff.name.charAt(0)}</div>
+                                <div>
+                                  <p className="font-bold text-slate-900 text-sm">{aff.name}</p>
+                                  <p className="text-[10px] font-medium text-slate-400 mt-0.5">{aff.phone}</p>
                                 </div>
-                              </td>
-                              <td className="px-6 py-4">
-                                <div className="flex gap-4">
-                                  <div>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Ventes</p>
-                                    <p className="text-sm font-bold text-slate-900">{aff.conversions || 0}</p>
-                                  </div>
-                                  <div className="w-px h-6 bg-slate-100 self-center"></div>
-                                  <div>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Dû</p>
-                                    <p className="text-sm font-bold text-indigo-600">${((aff.conversions || 0) * settings.commissionRate).toLocaleString()}</p>
-                                  </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex gap-4">
+                                <div>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase">Ventes</p>
+                                  <p className="text-sm font-bold text-slate-900">{aff.conversions || 0}</p>
                                 </div>
-                              </td>
-                              <td className="px-6 py-4">
-                                {aff.promo_code ? (
-                                  <code className="text-[11px] font-bold bg-indigo-50 text-indigo-700 px-2 py-1 rounded border border-indigo-100">{aff.promo_code}</code>
-                                ) : (
-                                  <span className="text-[10px] text-slate-300 italic font-bold uppercase tracking-widest">-</span>
-                                )}
-                              </td>
-                              <td className="px-6 py-4">
-                                {aff.access_code ? (
-                                  <code className="text-[11px] font-bold bg-orange-50 text-orange-700 px-2 py-1 rounded border border-orange-100 tracking-widest">{aff.access_code}</code>
-                                ) : (
-                                  <span className="text-[10px] text-slate-300 italic font-bold uppercase tracking-widest">-</span>
-                                )}
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                {aff.status === 'pending' ? (
-                                  <button onClick={() => handleActivate(aff.id, aff.name)} className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-sm">Activer</button>
-                                ) : (
-                                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Opérationnel</span>
-                                )}
-                              </td>
-                            </tr>
-                          ))
-                        )}
+                                <div className="w-px h-6 bg-slate-100 self-center"></div>
+                                <div>
+                                  <p className="text-[10px] font-bold text-slate-400 uppercase">Dû</p>
+                                  <p className="text-sm font-bold text-indigo-600">${((aff.conversions || 0) * settings.commissionRate).toLocaleString()}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              {aff.promo_code ? (
+                                <code className="text-[11px] font-bold bg-indigo-50 text-indigo-700 px-2 py-1 rounded border border-indigo-100">{aff.promo_code}</code>
+                              ) : (
+                                <span className="text-[10px] text-slate-300 italic font-bold uppercase tracking-widest">-</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4">
+                              {aff.access_code ? (
+                                <code className="text-[11px] font-bold bg-orange-50 text-orange-700 px-2 py-1 rounded border border-orange-100 tracking-widest">{aff.access_code}</code>
+                              ) : (
+                                <span className="text-[10px] text-slate-300 italic font-bold uppercase tracking-widest">-</span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              {aff.status === 'pending' ? (
+                                <button onClick={() => handleActivate(aff.id, aff.name)} className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-sm">Activer</button>
+                              ) : (
+                                <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Opérationnel</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -2282,7 +2277,7 @@ function AdminDashboard() {
                     Flux de Versements
                   </h3>
                 </div>
-                
+
                 <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden text-left">
                   {payouts.length === 0 ? (
                     <div className="p-20 text-center text-slate-400 text-xs font-bold uppercase tracking-widest italic">Aucun mouvement récent</div>
@@ -2343,15 +2338,15 @@ function AdminDashboard() {
                       </div>
                       <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-600 cursor-pointer shadow-sm hover:bg-slate-50 transition-all">
                         <span className="material-symbols-outlined text-sm">edit</span>
-                        <input 
-                          type="file" 
-                          hidden 
+                        <input
+                          type="file"
+                          hidden
                           accept="image/*"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
                               const reader = new FileReader();
-                              reader.onloadend = () => setAdminProfile({...adminProfile, avatarUrl: reader.result as string});
+                              reader.onloadend = () => setAdminProfile({ ...adminProfile, avatarUrl: reader.result as string });
                               reader.readAsDataURL(file);
                             }
                           }}
@@ -2363,16 +2358,16 @@ function AdminDashboard() {
                       <p className="text-sm font-medium text-slate-500">Super Administrateur</p>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Identité</label>
-                        <input type="text" value={adminProfile.name} onChange={(e) => setAdminProfile({...adminProfile, name: e.target.value})} className="w-full px-4 py-2 bg-white rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-medium text-sm" />
+                        <input type="text" value={adminProfile.name} onChange={(e) => setAdminProfile({ ...adminProfile, name: e.target.value })} className="w-full px-4 py-2 bg-white rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-medium text-sm" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Email</label>
-                        <input type="text" value={adminProfile.email} onChange={(e) => setAdminProfile({...adminProfile, email: e.target.value})} className="w-full px-4 py-2 bg-white rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-medium text-sm" />
+                        <input type="text" value={adminProfile.email} onChange={(e) => setAdminProfile({ ...adminProfile, email: e.target.value })} className="w-full px-4 py-2 bg-white rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 focus:border-indigo-600/30 transition-all font-medium text-sm" />
                       </div>
                     </div>
                     <button className="w-full bg-slate-900 text-white py-3 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-sm">Mettre à jour le profil</button>
@@ -2399,33 +2394,33 @@ function AdminDashboard() {
                     <div className="space-y-6">
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Nom de la Plateforme</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={settings.platformName}
-                          onChange={(e) => setSettings({...settings, platformName: e.target.value})}
+                          onChange={(e) => setSettings({ ...settings, platformName: e.target.value })}
                           className="w-full px-4 py-2 bg-white rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 transition-all font-medium text-sm text-slate-900"
                         />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Commission Fixe ($)</label>
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           value={settings.commissionRate}
-                          onChange={(e) => setSettings({...settings, commissionRate: parseInt(e.target.value)})}
+                          onChange={(e) => setSettings({ ...settings, commissionRate: parseInt(e.target.value) })}
                           className="w-full px-4 py-2 bg-white rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-600/10 transition-all font-medium text-sm text-slate-900"
                         />
                       </div>
                     </div>
                   </ExecutiveCard>
-                  
+
                   <ExecutiveCard className="p-8">
                     <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
                       <div>
                         <p className="text-sm font-bold text-slate-900">Activation Automatique</p>
                         <p className="text-[10px] text-slate-400 font-medium">Activer les partenaires dès l'inscription</p>
                       </div>
-                      <button 
-                        onClick={() => setSettings({...settings, allowAutoActivation: !settings.allowAutoActivation})}
+                      <button
+                        onClick={() => setSettings({ ...settings, allowAutoActivation: !settings.allowAutoActivation })}
                         className={`w-14 h-8 rounded-full relative transition-all duration-300 ${settings.allowAutoActivation ? 'bg-indigo-600' : 'bg-slate-200'}`}
                       >
                         <div className={`absolute top-1 w-6 h-6 rounded-full bg-white shadow-sm transition-all duration-300 ${settings.allowAutoActivation ? 'left-7' : 'left-1'}`}></div>
@@ -2444,11 +2439,11 @@ function AdminDashboard() {
                       {Object.entries(settings.paymentNumbers).map(([key, value]) => (
                         <div key={key} className="space-y-1.5">
                           <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">{key}</label>
-                          <input 
-                            type="text" 
+                          <input
+                            type="text"
                             value={value}
                             onChange={(e) => setSettings({
-                              ...settings, 
+                              ...settings,
                               paymentNumbers: { ...settings.paymentNumbers, [key]: e.target.value }
                             })}
                             className="w-full px-4 py-2 bg-slate-50 rounded-lg border border-slate-200 focus:bg-white outline-none transition-all font-medium text-sm text-slate-900"
@@ -2457,7 +2452,7 @@ function AdminDashboard() {
                       ))}
                     </div>
                   </ExecutiveCard>
-                  
+
                   <ExecutiveCard className="p-8 bg-slate-900 text-white relative overflow-hidden group">
                     <div className="relative z-10 text-left">
                       <h4 className="text-lg font-bold mb-2">Audit de Sécurité</h4>
@@ -2471,7 +2466,7 @@ function AdminDashboard() {
             )}
 
             {activeModule === 'chats' && (
-               <AdminChatSupport />
+              <AdminChatSupport />
             )}
           </AnimatePresence>
         </div>
@@ -2483,7 +2478,7 @@ function AdminDashboard() {
 function Testimonials() {
   return (
     <section className="py-32 bg-white" id="testimonials">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -2567,7 +2562,7 @@ function Testimonials() {
 function FAQ() {
   return (
     <section className="py-24 bg-slate-50" id="faq">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -2685,7 +2680,7 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
@@ -2712,8 +2707,8 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
         <a href="/" className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-bold text-sm">
           <span className="material-symbols-outlined text-sm">arrow_back</span> Retour
         </a>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="w-full max-w-sm mx-auto"
@@ -2727,7 +2722,7 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
           </div>
 
           {error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl text-sm mb-8 text-center font-bold flex items-center justify-center gap-2"
@@ -2742,9 +2737,9 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Email Professionnel</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">mail</span>
-                <input 
-                  type="email" 
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all placeholder:text-slate-400" 
+                <input
+                  type="email"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all placeholder:text-slate-400"
                   placeholder="admin@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -2757,9 +2752,9 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Mot de passe</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">lock</span>
-                <input 
-                  type="password" 
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all placeholder:text-slate-400" 
+                <input
+                  type="password"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all placeholder:text-slate-400"
                   placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -2768,8 +2763,8 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={loading}
               className="w-full text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed group bg-gradient-to-tr from-blue-600 to-indigo-600"
             >
@@ -2790,43 +2785,43 @@ function AdminLoginForm({ onLogin }: { onLogin: (userData: any) => void }) {
 
       {/* Right Side: Beautiful text & branding */}
       <div className="hidden lg:flex w-1/2 bg-slate-950 relative overflow-hidden items-center justify-center p-20 xl:p-24">
-         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-slate-900 to-slate-950 z-0 opacity-90"></div>
-         <div className="absolute top-[10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] bg-blue-500/20 animate-pulse"></div>
-         <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] bg-indigo-500/20" style={{ animationDelay: '2s' }}></div>
-         
-         <div className="relative z-10 text-white max-w-xl">
-           <div className="mb-10 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
-             <span className="material-symbols-outlined text-3xl text-blue-400">admin_panel_settings</span>
-           </div>
-           <h2 className="text-4xl xl:text-5xl font-display font-black mb-8 leading-tight tracking-tight">
-             L'espace exclusif pour <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">piloter votre empire.</span>
-           </h2>
-           <p className="text-lg xl:text-xl text-slate-300 leading-relaxed mb-12">
-             Prenez le contrôle total de vos opérations e-commerce. Analysez vos ventes, gérez vos affiliés et supervisez les paiements avec une interface pensée pour une efficacité absolue.
-           </p>
-           
-           <div className="space-y-6">
-             <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-               <div className="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
-                 <span className="material-symbols-outlined text-2xl">security</span>
-               </div>
-               <div>
-                 <h3 className="font-bold text-lg mb-1">Sécurité Maximale</h3>
-                 <p className="text-sm text-slate-400">Infrastructures hautement sécurisées, accès restreint et surveillance continue.</p>
-               </div>
-             </div>
-             
-             <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-               <div className="w-14 h-14 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
-                 <span className="material-symbols-outlined text-2xl">monitoring</span>
-               </div>
-               <div>
-                 <h3 className="font-bold text-lg mb-1">Analytique Avancée</h3>
-                 <p className="text-sm text-slate-400">Visualisez la croissance de votre plateforme en temps réel et prenez les meilleures décisions.</p>
-               </div>
-             </div>
-           </div>
-         </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-slate-900 to-slate-950 z-0 opacity-90"></div>
+        <div className="absolute top-[10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] bg-blue-500/20 animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] bg-indigo-500/20" style={{ animationDelay: '2s' }}></div>
+
+        <div className="relative z-10 text-white max-w-xl">
+          <div className="mb-10 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+            <span className="material-symbols-outlined text-3xl text-blue-400">admin_panel_settings</span>
+          </div>
+          <h2 className="text-4xl xl:text-5xl font-display font-black mb-8 leading-tight tracking-tight">
+            L'espace exclusif pour <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">piloter votre empire.</span>
+          </h2>
+          <p className="text-lg xl:text-xl text-slate-300 leading-relaxed mb-12">
+            Prenez le contrôle total de vos opérations e-commerce. Analysez vos ventes, gérez vos affiliés et supervisez les paiements avec une interface pensée pour une efficacité absolue.
+          </p>
+
+          <div className="space-y-6">
+            <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                <span className="material-symbols-outlined text-2xl">security</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Sécurité Maximale</h3>
+                <p className="text-sm text-slate-400">Infrastructures hautement sécurisées, accès restreint et surveillance continue.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="w-14 h-14 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
+                <span className="material-symbols-outlined text-2xl">monitoring</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Analytique Avancée</h3>
+                <p className="text-sm text-slate-400">Visualisez la croissance de votre plateforme en temps réel et prenez les meilleures décisions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -2842,7 +2837,7 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch('/api/affiliates/login', {
         method: 'POST',
@@ -2869,8 +2864,8 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
         <a href="/" className="absolute top-8 left-8 flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-bold text-sm">
           <span className="material-symbols-outlined text-sm">arrow_back</span> Retour
         </a>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="w-full max-w-sm mx-auto"
@@ -2884,7 +2879,7 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
           </div>
 
           {error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl text-sm mb-8 text-center font-bold flex items-center justify-center gap-2"
@@ -2899,9 +2894,9 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Numéro WhatsApp</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">phone</span>
-                <input 
-                  type="tel" 
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all placeholder:text-slate-400" 
+                <input
+                  type="tel"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all placeholder:text-slate-400"
                   placeholder="+243 ..."
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -2914,9 +2909,9 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
               <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Code d'Accès Unique</label>
               <div className="relative">
                 <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">key</span>
-                <input 
-                  type="password" 
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all placeholder:text-slate-400" 
+                <input
+                  type="password"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all placeholder:text-slate-400"
                   placeholder="Code fourni par l'admin"
                   value={accessCode}
                   onChange={(e) => setAccessCode(e.target.value)}
@@ -2925,8 +2920,8 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={loading}
               className="w-full text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed group bg-gradient-to-tr from-primary to-orange-500"
             >
@@ -2947,43 +2942,43 @@ function PartnerPortalAccess({ onLogin }: { onLogin: (userData: any) => void }) 
 
       {/* Left Side: Beautiful text & branding */}
       <div className="hidden lg:flex w-1/2 bg-slate-950 relative overflow-hidden items-center justify-center p-20 xl:p-24">
-         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 z-0 opacity-90"></div>
-         <div className="absolute top-[10%] left-[0%] w-[70%] h-[70%] rounded-full blur-[150px] bg-primary/20 animate-pulse"></div>
-         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] bg-orange-500/20" style={{ animationDelay: '2s' }}></div>
-         
-         <div className="relative z-10 text-white max-w-xl">
-           <div className="mb-10 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
-             <span className="material-symbols-outlined text-3xl text-orange-400">loyalty</span>
-           </div>
-           <h2 className="text-4xl xl:text-5xl font-display font-black mb-8 leading-tight tracking-tight">
-             Espace Partenaire <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">votre portail de réussite.</span>
-           </h2>
-           <p className="text-lg xl:text-xl text-slate-300 leading-relaxed mb-12">
-             Rejoignez le réseau le plus dynamique de RDC. Suivez vos commissions, gérez vos affiliés et voyez vos revenus croître en temps réel.
-           </p>
-           
-           <div className="space-y-6">
-             <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-               <div className="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0">
-                 <span className="material-symbols-outlined text-2xl">payments</span>
-               </div>
-               <div>
-                 <h3 className="font-bold text-lg mb-1">Commissions Instantanées</h3>
-                 <p className="text-sm text-slate-400">Financement direct de vos projets avec nos taux de commission imbattables.</p>
-               </div>
-             </div>
-             
-             <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-               <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0">
-                 <span className="material-symbols-outlined text-2xl">insights</span>
-               </div>
-               <div>
-                 <h3 className="font-bold text-lg mb-1">Suivi en Temps Réel</h3>
-                 <p className="text-sm text-slate-400">Des statistiques claires et transparentes sur l'impact de chaque recommandation.</p>
-               </div>
-             </div>
-           </div>
-         </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-900 z-0 opacity-90"></div>
+        <div className="absolute top-[10%] left-[0%] w-[70%] h-[70%] rounded-full blur-[150px] bg-primary/20 animate-pulse"></div>
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[150px] bg-orange-500/20" style={{ animationDelay: '2s' }}></div>
+
+        <div className="relative z-10 text-white max-w-xl">
+          <div className="mb-10 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+            <span className="material-symbols-outlined text-3xl text-orange-400">loyalty</span>
+          </div>
+          <h2 className="text-4xl xl:text-5xl font-display font-black mb-8 leading-tight tracking-tight">
+            Espace Partenaire <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">votre portail de réussite.</span>
+          </h2>
+          <p className="text-lg xl:text-xl text-slate-300 leading-relaxed mb-12">
+            Rejoignez le réseau le plus dynamique de RDC. Suivez vos commissions, gérez vos affiliés et voyez vos revenus croître en temps réel.
+          </p>
+
+          <div className="space-y-6">
+            <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0">
+                <span className="material-symbols-outlined text-2xl">payments</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Commissions Instantanées</h3>
+                <p className="text-sm text-slate-400">Financement direct de vos projets avec nos taux de commission imbattables.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0">
+                <span className="material-symbols-outlined text-2xl">insights</span>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-1">Suivi en Temps Réel</h3>
+                <p className="text-sm text-slate-400">Des statistiques claires et transparentes sur l'impact de chaque recommandation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -3048,7 +3043,7 @@ function PaymentLinkPage({ linkId }: { linkId: string }) {
               <p className="text-slate-400 font-medium">Lien de paiement sécurisé généré par votre conseiller <span className="text-white font-bold">{linkData?.affiliate_name}</span></p>
             </div>
           </div>
-          
+
           <div className="p-12">
             <div className="grid md:grid-cols-2 gap-12">
               <div className="space-y-8">
@@ -3065,7 +3060,7 @@ function PaymentLinkPage({ linkId }: { linkId: string }) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="pt-8 border-t border-slate-100">
                   <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Informations Client</h3>
                   <div className="bg-slate-50 p-6 rounded-2xl">
@@ -3074,7 +3069,7 @@ function PaymentLinkPage({ linkId }: { linkId: string }) {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100">
                 <h3 className="text-xl font-black text-slate-900 mb-6 tracking-tight">Payer avec Mobile Money</h3>
                 <div className="space-y-4 mb-10">
@@ -3087,8 +3082,8 @@ function PaymentLinkPage({ linkId }: { linkId: string }) {
                     <span className="font-bold text-slate-700">Airtel Money</span>
                   </div>
                 </div>
-                
-                <button 
+
+                <button
                   onClick={handlePay}
                   className="w-full bg-primary text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
                 >
@@ -3132,7 +3127,7 @@ export default function App() {
   if (loginState.role === 'admin') {
     return (
       <div className="relative">
-        <button 
+        <button
           onClick={() => setLoginState({ role: null, user: null })}
           className="fixed top-4 right-4 z-[100] bg-slate-900 text-white px-4 py-2 rounded-full font-bold shadow-lg"
         >
@@ -3145,9 +3140,9 @@ export default function App() {
 
   if (loginState.role === 'affiliate') {
     return (
-      <AffiliateDashboard 
-        affiliateId={loginState.user.id} 
-        onLogout={() => setLoginState({ role: null, user: null })} 
+      <AffiliateDashboard
+        affiliateId={loginState.user.id}
+        onLogout={() => setLoginState({ role: null, user: null })}
       />
     );
   }
@@ -3191,11 +3186,11 @@ export default function App() {
       </main>
       <Footer />
       {/* Hidden triggers for login - for easier access during dev */}
-      <div 
+      <div
         className="fixed bottom-4 left-4 w-8 h-8 opacity-0 hover:opacity-10 transition-opacity cursor-pointer z-[100]"
         onClick={() => setShowLogin('admin')}
       ></div>
-      <div 
+      <div
         className="fixed bottom-4 right-20 w-8 h-8 opacity-0 hover:opacity-10 transition-opacity cursor-pointer z-[100]"
         onClick={() => setShowLogin('affiliate')}
       ></div>
