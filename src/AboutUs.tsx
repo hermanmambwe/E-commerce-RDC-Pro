@@ -55,16 +55,16 @@ export default function AboutUs() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.8 }}
-            className="mt-20 grid grid-cols-3 gap-6 max-w-2xl mx-auto"
+            className="mt-16 flex overflow-x-auto sm:overflow-visible sm:grid sm:grid-cols-3 gap-4 max-w-2xl mx-auto pb-2 sm:pb-0 px-1 sm:px-0 snap-x snap-mandatory"
           >
             {[
               { value: '7j', label: 'Livraison boutique' },
               { value: '20%', label: 'Commission partenaire' },
               { value: '100%', label: 'Paiement Mobile Money' },
             ].map((s) => (
-              <div key={s.label} className="text-center p-6 rounded-2xl bg-slate-50 border border-slate-100">
-                <p className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">{s.value}</p>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">{s.label}</p>
+              <div key={s.label} className="text-center p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-100 min-w-[140px] sm:min-w-0 flex-shrink-0 snap-start">
+                <p className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">{s.value}</p>
+                <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 leading-tight">{s.label}</p>
               </div>
             ))}
           </motion.div>
@@ -113,7 +113,7 @@ export default function AboutUs() {
                 </div>
                 <div>
                   <p className="text-xs font-black text-slate-900">Fondateur Vérifié</p>
-                  <p className="text-[10px] text-slate-400 font-medium">Kinshasa, RDC</p>
+                  <p className="text-[10px] text-slate-400 font-medium">Kolwezi, RDC</p>
                 </div>
               </motion.div>
             </motion.div>
