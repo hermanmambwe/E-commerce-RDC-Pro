@@ -11,6 +11,7 @@ import ClientOnboarding from './ClientOnboarding';
 import AffiliateClientsModule from './AffiliateClientsModule';
 import AffiliateResourcesModule from './AffiliateResourcesModule';
 import AdminCEOModule from './AdminCEOModule';
+import InvoiceView from './InvoiceView';
 
 function calculateAffiliateTier(conversions: number) {
   if (conversions >= 50) return { name: 'Partenaire Platine', commission: 100, next: null, progress: 100, color: 'from-purple-500 to-fuchsia-600', icon: 'diamond', badgeBg: 'bg-purple-100 text-purple-700' };
@@ -3144,6 +3145,7 @@ export default function App() {
   const clientAction = urlParams.get('client'); // 'login' | 'register'
   const affiliateRef = urlParams.get('ref');
   const trafficSource = urlParams.get('src');
+  const invoiceId = urlParams.get('invoice');
 
   useEffect(() => {
     if (affiliateRef) {
@@ -3202,6 +3204,10 @@ export default function App() {
 
   if (linkId) {
     return <PaymentLinkPage linkId={linkId} />;
+  }
+
+  if (invoiceId) {
+    return <InvoiceView />;
   }
 
   if (loginState.role === 'admin') {

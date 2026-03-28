@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 
 export default function ClientPortal({ onLogout, initialClient = null }: { onLogout: () => void, initialClient?: any }) {
   const [phone, setPhone] = useState('');
@@ -12,6 +13,7 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
   const [deliverables, setDeliverables] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [activeChat, setActiveChat] = useState<'admin' | 'affiliate'>('admin');
+  const [invoices, setInvoices] = useState<any[]>([]);
 
   const [messageInput, setMessageInput] = useState('');
 
@@ -41,10 +43,14 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
       setContract(data.contract);
       setProject(data.project);
       setDeliverables(data.deliverables);
-      // update client if status changed
       if (data.client.status !== client.status) {
         setClient(data.client);
       }
+
+      // Fetch invoices
+      const invRes = await fetch(`/api/admin/clients/${client.id}/invoices`);
+      const invData = await invRes.json();
+      setInvoices(invData);
     } catch (e) {
       console.error(e);
     }
@@ -402,6 +408,79 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
             </div>
           )}
 
+          {/* Financial Summary Box */}
+          <div className="bg-white rounded-[2rem] p-8 shadow-xl ring-1 ring-slate-200 overflow-hidden relative">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+             <h3 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2 mb-6">
+                <span className="material-symbols-outlined text-emerald-600">account_balance_wallet</span> 
+                Financement & Facturation
+             </h3>
+             
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Progression du Paiement</p>
+                   <div className="flex items-end gap-2 mb-2">
+                      <span className="text-3xl font-black text-slate-900">${(project?.paid_amount || 0).toLocaleString()}</span>
+                      <span className="text-sm font-bold text-slate-400 mb-1">/ ${(project?.total_price || 1125).toLocaleString()}</span>
+                   </div>
+                   <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.min(((project?.paid_amount || 0) / (project?.total_price || 1125)) * 100, 100)}%` }}
+                        className="h-full bg-emerald-500 rounded-full shadow-lg shadow-emerald-200"
+                      />
+                   </div>
+                </div>
+                <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                   <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-emerald-600 border border-slate-100">
+                      <span className="material-symbols-outlined font-black">check_circle</span>
+                   </div>
+                   <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Statut Financier</p>
+                      <p className="text-xs font-black text-slate-900">
+                        {project?.paid_amount >= project?.total_price ? 'Totalement Payé' : project?.paid_amount > 0 ? 'Acompte Réglé' : 'En attente de paiement'}
+                      </p>
+                   </div>
+                </div>
+             </div>
+
+             <div className="space-y-3">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Vos Factures</p>
+                {invoices.length === 0 ? (
+                  <p className="text-xs text-slate-500 italic">Aucune facture émise pour le moment.</p>
+                ) : (
+                  invoices.map((inv: any) => (
+                    <div key={inv.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-emerald-200 transition-all group">
+                       <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-slate-400">description</span>
+                          <div>
+                             <p className="text-xs font-black text-slate-900">Facture {inv.id}</p>
+                             <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">
+                                {inv.stage === 'initial60' ? 'Acompte 60%' : inv.stage === 'final40' ? 'Solde 40%' : 'Paiement Complet'}
+                             </p>
+                          </div>
+                       </div>
+                       <div className="flex items-center gap-4">
+                          <div className="text-right">
+                             <p className="text-xs font-black text-slate-900">${inv.amount.toLocaleString()}</p>
+                             <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}`}>
+                                {inv.status === 'paid' ? 'Payé' : 'En attente'}
+                             </span>
+                          </div>
+                          <a 
+                            href={`/?invoice=${inv.id}`} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="w-8 h-8 flex items-center justify-center bg-white rounded-lg border border-slate-200 text-slate-400 hover:text-emerald-600 hover:border-emerald-200 transition-all"
+                          >
+                             <span className="material-symbols-outlined text-sm">open_in_new</span>
+                          </a>
+                       </div>
+                    </div>
+                  ))
+                )}
+             </div>
+          </div>
         </div>
 
         {/* Right Column: Built-in Messaging */}

@@ -18,6 +18,7 @@ export default function AdminClientsModule() {
   // project management state
   const [managingProject, setManagingProject] = useState<any | null>(null);
   const [isUpdatingProject, setIsUpdatingProject] = useState(false);
+  const [projectInvoices, setProjectInvoices] = useState<any[]>([]);
 
   useEffect(() => {
     fetchClients();
@@ -33,6 +34,38 @@ export default function AdminClientsModule() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchProjectInvoices = async (clientId: number) => {
+    try {
+      const res = await fetch(`/api/admin/clients/${clientId}/invoices`); // Note: need this endpoint or reuse another
+      const data = await res.json();
+      setProjectInvoices(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (managingProject) {
+      fetchProjectInvoices(managingProject.id);
+    }
+  }, [managingProject]);
+
+  const handleMarkAsPaid = async (invoiceId: string) => {
+    setIsUpdatingProject(true);
+    try {
+      const res = await fetch(`/api/admin/invoices/${invoiceId}/pay`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payment_method: 'Manuel' })
+      });
+      if (res.ok) {
+        fetchProjectInvoices(managingProject.id);
+        fetchClients();
+      }
+    } catch (e) { console.error(e); }
+    finally { setIsUpdatingProject(false); }
   };
 
   const handleAddClient = async (e: React.FormEvent) => {
@@ -197,6 +230,58 @@ export default function AdminClientsModule() {
                 <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Dernière Action</p>
                 <p className="text-xs font-black text-slate-900">Mise à jour automatique</p>
              </div>
+           </div>
+
+           {/* Invoices Section */}
+           <div className="mt-8 pt-8 border-t border-slate-100">
+              <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Historique des Factures</h5>
+              <div className="space-y-3">
+                 {projectInvoices.length === 0 ? (
+                   <p className="text-xs text-slate-400 italic">Aucune facture générée pour ce client.</p>
+                 ) : (
+                   projectInvoices.map(inv => (
+                     <div key={inv.id} className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl">
+                        <div className="flex items-center gap-4">
+                           <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${inv.status === 'paid' ? 'bg-emerald-100 text-emerald-600' : 'bg-orange-100 text-orange-600'}`}>
+                              {inv.id.split('-')[0]}
+                           </div>
+                           <div>
+                              <p className="text-sm font-black text-slate-900 tracking-tight">Facture {inv.id}</p>
+                              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                {inv.stage === 'initial60' ? 'Acompte 60%' : inv.stage === 'final40' ? 'Solde 40%' : 'Paiement Complet'}
+                              </p>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-6">
+                           <div className="text-right">
+                              <p className="text-sm font-black text-slate-900">${inv.amount.toLocaleString()}</p>
+                              <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${inv.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
+                                 {inv.status === 'paid' ? 'Confirmé' : 'En attente'}
+                              </span>
+                           </div>
+                           {inv.status === 'pending' && (
+                              <button 
+                                onClick={() => handleMarkAsPaid(inv.id)}
+                                disabled={isUpdatingProject}
+                                className="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors"
+                              >
+                                Confirmer Paiement
+                              </button>
+                           )}
+                           <a 
+                             href={`/?invoice=${inv.id}`} 
+                             target="_blank" 
+                             rel="noreferrer"
+                             className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"
+                             title="Voir la facture"
+                           >
+                             <span className="material-symbols-outlined text-lg">open_in_new</span>
+                           </a>
+                        </div>
+                     </div>
+                   ))
+                 )}
+              </div>
            </div>
         </div>
       )}

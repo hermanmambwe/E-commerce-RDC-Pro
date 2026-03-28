@@ -202,6 +202,21 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS invoices (
+    id TEXT PRIMARY KEY, -- INV-123456
+    client_id INTEGER NOT NULL,
+    affiliate_id INTEGER,
+    amount REAL NOT NULL,
+    stage TEXT NOT NULL, -- 'initial60', 'final40', 'full100'
+    status TEXT DEFAULT 'pending', -- 'pending', 'paid'
+    payment_method TEXT,
+    paid_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+  )
+`);
+
 try {
   db.exec(`ALTER TABLE client_messages ADD COLUMN room_type TEXT NOT NULL DEFAULT 'admin'`);
 } catch (e) {
@@ -209,9 +224,11 @@ try {
 }
 
 try {
-  db.exec(`ALTER TABLE client_projects ADD COLUMN milestones TEXT DEFAULT '{"branding": 0, "catalog": 0, "payment": 0, "marketing": 0, "testing": 0, "live": 0}'`);
-} catch (e) {
-  // column likely exists
-}
+  db.exec(`ALTER TABLE client_projects ADD COLUMN total_price REAL DEFAULT 1125.0`);
+} catch (e) {}
+
+try {
+  db.exec(`ALTER TABLE client_projects ADD COLUMN paid_amount REAL DEFAULT 0.0`);
+} catch (e) {}
 
 export default db;

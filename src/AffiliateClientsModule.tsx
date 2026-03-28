@@ -8,6 +8,11 @@ export default function AffiliateClientsModule({ affiliateId }: { affiliateId: n
   const [activeChatClientId, setActiveChatClientId] = useState<number | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [messageInput, setMessageInput] = useState('');
+  
+  // Invoice generation state
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [lastGeneratedLink, setLastGeneratedLink] = useState<string | null>(null);
 
   useEffect(() => {
     fetchClients();
@@ -64,6 +69,36 @@ export default function AffiliateClientsModule({ affiliateId }: { affiliateId: n
     }
   };
 
+  const generateInvoice = async (stage: string) => {
+    if (!activeChatClientId) return;
+    setIsGenerating(true);
+    setLastGeneratedLink(null);
+    try {
+      const res = await fetch('/api/invoices/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          client_id: activeChatClientId, 
+          affiliate_id: affiliateId, 
+          stage 
+        })
+      });
+      const data = await res.json();
+      if (data.invoice_id) {
+        setLastGeneratedLink(`${window.location.origin}/invoice/${data.invoice_id}`);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    alert('Lien copié dans le presse-papier !');
+  };
+
   return (
     <section>
       <div className="flex items-center justify-between mb-6">
@@ -71,7 +106,90 @@ export default function AffiliateClientsModule({ affiliateId }: { affiliateId: n
           <span className="material-symbols-outlined text-indigo-600">people</span>
           Mes Clients Référés
         </h3>
+        {activeChatClientId && (
+           <button 
+            onClick={() => { setShowInvoiceModal(true); setLastGeneratedLink(null); }}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-black shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all uppercase tracking-widest"
+           >
+             <span className="material-symbols-outlined text-sm">receipt_long</span>
+             Générer Paiement
+           </button>
+        )}
       </div>
+
+      {showInvoiceModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+           <motion.div 
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl relative overflow-hidden"
+           >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+              
+              <div className="flex justify-between items-center mb-8 relative z-10">
+                 <h4 className="text-xl font-black text-slate-900 tracking-tight">Stage de Paiement</h4>
+                 <button onClick={() => setShowInvoiceModal(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><span className="material-symbols-outlined text-slate-400">close</span></button>
+              </div>
+
+              {!lastGeneratedLink ? (
+                <div className="space-y-4 relative z-10">
+                   <p className="text-xs text-slate-500 font-medium leading-relaxed mb-6">Sélectionnez l'étape de paiement pour <span className="text-indigo-600 font-bold">{clients.find(c => c.id === activeChatClientId)?.name}</span>.</p>
+                   
+                   {[
+                     { id: 'initial60', label: 'Acompte 60%', price: '$675', color: 'bg-indigo-50 border-indigo-100 text-indigo-700' },
+                     { id: 'final40', label: 'Solde 40%', price: '$450', color: 'bg-blue-50 border-blue-100 text-blue-700' },
+                     { id: 'full100', label: 'Paiement Complet', price: '$1125', color: 'bg-emerald-50 border-emerald-100 text-emerald-700' }
+                   ].map(s => (
+                     <button 
+                       key={s.id}
+                       disabled={isGenerating}
+                       onClick={() => generateInvoice(s.id)}
+                       className={`w-full flex items-center justify-between p-4 rounded-2xl border-2 hover:scale-[1.02] transition-all group ${s.color}`}
+                     >
+                       <div className="text-left">
+                          <p className="text-[10px] font-black uppercase tracking-widest opacity-60">Package Élite</p>
+                          <p className="font-black">{s.label}</p>
+                       </div>
+                       <p className="text-lg font-black">{s.price}</p>
+                     </button>
+                   ))}
+                </div>
+              ) : (
+                <div className="text-center py-6 animate-in zoom-in duration-500 relative z-10">
+                   <div className="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                      <span className="material-symbols-outlined text-3xl">check_circle</span>
+                   </div>
+                   <h5 className="text-lg font-black text-slate-900 mb-2">Lien Généré !</h5>
+                   <p className="text-xs text-slate-500 font-medium mb-8">Envoyez ce lien à votre client pour qu'il puisse voir et régler sa facture.</p>
+                   
+                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-3 mb-8">
+                      <span className="text-[10px] font-bold text-slate-400 truncate flex-1">{lastGeneratedLink}</span>
+                      <button 
+                        onClick={() => copyToClipboard(lastGeneratedLink)}
+                        className="p-2 bg-white text-slate-600 rounded-lg shadow-sm border border-slate-100 hover:text-indigo-600"
+                      >
+                         <span className="material-symbols-outlined text-sm">content_copy</span>
+                      </button>
+                   </div>
+
+                   <button 
+                    onClick={() => setShowInvoiceModal(false)}
+                    className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-800 transition-colors"
+                   >
+                     Terminer
+                   </button>
+                </div>
+              )}
+
+              {isGenerating && (
+                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center">
+                    <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p className="text-[10px] font-black uppercase text-indigo-600 tracking-widest">Génération...</p>
+                 </div>
+              )}
+           </motion.div>
+        </div>
+      )}
 
       <div className="bg-white border text-left border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col md:flex-row min-h-[500px]">
         {/* Left Side: Client List */}

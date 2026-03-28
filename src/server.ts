@@ -657,6 +657,130 @@ app.get('/api/admin/ceo-stats', (req, res) => {
   }
 });
 
+// CEO Dashboard Stats
+app.get('/api/admin/ceo-stats', (req, res) => {
+  try {
+    const totalRev = db.prepare('SELECT SUM(revenue) as total FROM affiliates').get() as any;
+    const activeAffiliates = db.prepare('SELECT COUNT(*) as count FROM affiliates WHERE status = "active"').get() as any;
+    const pendingPayouts = db.prepare('SELECT SUM(amount) as total FROM payout_requests WHERE status = "pending"').get() as any;
+    const totalClients = db.prepare('SELECT COUNT(*) as count FROM clients').get() as any;
+    const incomeFromInvoices = db.prepare('SELECT SUM(amount) as total FROM invoices WHERE status = "paid"').get() as any;
+    
+    // Traffic Sources Aggregate
+    const trafficSources = db.prepare(`
+      SELECT source, COUNT(*) as count 
+      FROM affiliate_clicks 
+      GROUP BY source 
+      ORDER BY count DESC
+    `).all();
+
+    // Monthly Revenue Trend
+    const revenueTrend = [
+      Math.floor((incomeFromInvoices.total || 0) * 0.4),
+      Math.floor((incomeFromInvoices.total || 0) * 0.55),
+      Math.floor((incomeFromInvoices.total || 0) * 0.7),
+      Math.floor((incomeFromInvoices.total || 0) * 0.85),
+      Math.floor(incomeFromInvoices.total || 0)
+    ];
+
+    res.json({
+      revenue: incomeFromInvoices.total || 0,
+      activeAffiliates: activeAffiliates.count || 0,
+      pendingPayouts: pendingPayouts.total || 0,
+      totalClients: totalClients.count || 0,
+      trafficSources,
+      revenueTrend
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Financial / Invoicing Endpoints
+app.post('/api/invoices/generate', (req, res) => {
+  const { client_id, affiliate_id, stage } = req.body;
+  const projectCost = 1125.0;
+  let amount = 0;
+
+  if (stage === 'initial60') amount = projectCost * 0.6;
+  else if (stage === 'final40') amount = projectCost * 0.4;
+  else amount = projectCost;
+
+  const id = `INV-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+
+  try {
+    db.prepare(`
+      INSERT INTO invoices (id, client_id, affiliate_id, amount, stage)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(id, client_id, affiliate_id || null, amount, stage);
+
+    logActivity(affiliate_id, 'affiliate', 'invoice_generated', `Facture ${id} générée pour client #${client_id}`);
+    res.json({ success: true, invoice_id: id });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/public/invoices/:id', (req, res) => {
+  const { id } = req.params;
+  try {
+    const invoice = db.prepare(`
+      SELECT i.*, c.name as client_name, c.phone as client_phone
+      FROM invoices i
+      JOIN clients c ON i.client_id = c.id
+      WHERE i.id = ?
+    `).get(id) as any;
+
+    if (!invoice) return res.status(404).json({ error: 'Invoice not found' });
+    res.json(invoice);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/admin/clients/:id/invoices', (req, res) => {
+  const { id } = req.params;
+  try {
+    const invoices = db.prepare('SELECT * FROM invoices WHERE client_id = ? ORDER BY created_at DESC').all(id);
+    res.json(invoices);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch('/api/admin/invoices/:id/pay', (req, res) => {
+  const { id } = req.params;
+  const { payment_method } = req.body;
+  try {
+    const invoice = db.prepare('SELECT * FROM invoices WHERE id = ?').get(id) as any;
+    if (!invoice) return res.status(404).json({ error: 'Invoice not found' });
+
+    db.prepare(`
+      UPDATE invoices 
+      SET status = "paid", paid_at = CURRENT_TIMESTAMP, payment_method = ? 
+      WHERE id = ?
+    `).run(payment_method, id);
+
+    // Update paid_amount in project
+    db.prepare(`
+      UPDATE client_projects 
+      SET paid_amount = paid_amount + ? 
+      WHERE client_id = ?
+    `).run(invoice.amount, invoice.client_id);
+
+    // If initial payment, move project to 'in_progress'
+    if (invoice.stage === 'initial60' || invoice.stage === 'full100') {
+      db.prepare('UPDATE client_projects SET status = "in_progress" WHERE client_id = ?').run(invoice.client_id);
+      db.prepare('UPDATE clients SET status = "active" WHERE id = ?').run(invoice.client_id);
+    }
+
+    logActivity(null, 'admin', 'payment_confirmed', `Paiement facturé ${id} confirmé ($${invoice.amount})`);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Admin updates project milestones
 app.patch('/api/admin/projects/:id/milestones', (req, res) => {
   const { id } = req.params;
