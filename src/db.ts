@@ -112,4 +112,68 @@ db.exec(`
   )
 `);
 
+// --- Client Onboarding Tables ---
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS clients (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    affiliate_id INTEGER, -- (Optional) The affiliate who brought them
+    name TEXT NOT NULL,
+    email TEXT,
+    phone TEXT NOT NULL,
+    access_code TEXT UNIQUE NOT NULL,
+    status TEXT DEFAULT 'pending_onboarding', -- 'pending_onboarding', 'active', 'completed'
+    business_details TEXT, -- JSON string from questionnaire
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (affiliate_id) REFERENCES affiliates(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS contracts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    is_signed INTEGER DEFAULT 0,
+    agreed_terms TEXT,
+    signed_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS client_projects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL UNIQUE,
+    kickoff_date DATETIME,
+    kickoff_time TEXT,
+    status TEXT DEFAULT 'setup', -- 'setup', 'in_progress', 'delivered'
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS client_deliverables (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    file_url TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS client_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    sender_type TEXT NOT NULL, -- 'admin' or 'client'
+    content TEXT NOT NULL,
+    is_read INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+  )
+`);
+
 export default db;

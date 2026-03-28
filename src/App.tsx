@@ -4,6 +4,10 @@ import AboutUs from './AboutUs';
 import AffiliateOnboarding from './AffiliateOnboarding';
 import ChatWidget from './ChatWidget';
 import AdminChatSupport from './AdminChatSupport';
+import ClientPortal from './ClientPortal';
+import AdminClientsModule from './AdminClientsModule';
+import VaultUI from './VaultUI';
+import ClientOnboarding from './ClientOnboarding';
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ days: 2, hours: 14, minutes: 35, seconds: 42 });
@@ -850,7 +854,7 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
     method: 'Bouche-à-oreille (Amis / Famille)'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [registrationResult, setRegistrationResult] = useState<any>(null);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -873,10 +877,9 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
         }),
       });
       if (response.ok) {
-        setSuccess(true);
-        setTimeout(() => {
-          onSuccess();
-        }, 5000); // Give them time to read the success message
+        const data = await response.json();
+        setRegistrationResult(data);
+        // Do not auto-close, wait for user to copy code and click "J'ai noté"
       } else {
         const err = await response.json();
         setError(err.error || "Erreur lors de l'inscription");
@@ -889,24 +892,15 @@ function Affiliate({ onSuccess }: { onSuccess: () => void }) {
     }
   };
 
-  if (success) {
+  if (registrationResult) {
     return (
       <section className="py-24 bg-slate-900 text-center text-white" id="affiliate">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-7xl mx-auto px-4"
-        >
-          <span className="material-symbols-outlined text-6xl text-green-400 mb-6">check_circle</span>
-          <h2 className="text-4xl font-display font-black mb-4 tracking-tight">Demande envoyée avec succès !</h2>
-          <p className="text-slate-300 text-lg mb-8">Votre demande est en cours d'examen par l'administration. Si elle est approuvée, vous recevrez votre Code d'Accès Unique très prochainement.</p>
-          <button
-            onClick={onSuccess}
-            className="bg-white text-slate-900 px-8 py-3 rounded-xl font-bold hover:bg-slate-100 transition-all"
-          >
-            Se connecter maintenant
-          </button>
-        </motion.div>
+        <VaultUI
+           accessCode={registrationResult.access_code}
+           onTimeout={onSuccess}
+           title="Bienvenue Partenaire"
+           subtitle="Félicitations ! Votre code d'accès est généré. Veuillez le conserver précieusement avant la fermeture de ce message."
+        />
       </section>
     );
   }
@@ -1865,7 +1859,7 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [activeModule, setActiveModule] = useState<'overview' | 'affiliates' | 'payouts' | 'profile' | 'settings' | 'chats'>('overview');
+  const [activeModule, setActiveModule] = useState<'overview' | 'clients' | 'affiliates' | 'payouts' | 'profile' | 'settings' | 'chats'>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Advanced Platform Settings
@@ -1973,6 +1967,7 @@ function AdminDashboard() {
 
   const menuItems = [
     { id: 'overview', label: 'Vue d\'Ensemble', icon: 'analytics' },
+    { id: 'clients', label: 'Onboarding Clients', icon: 'person_add' },
     { id: 'affiliates', label: 'Partenaires', icon: 'groups' },
     { id: 'payouts', label: `Retraits (${payouts.filter(p => p.status === 'pending').length})`, icon: 'payments' },
     { id: 'chats', label: 'Support Chat', icon: 'forum' },
@@ -2052,6 +2047,7 @@ function AdminDashboard() {
             <div>
               <h2 className="text-sm font-bold text-slate-900">
                 {activeModule === 'overview' ? 'Tableau de bord' :
+                  activeModule === 'clients' ? 'Onboarding Clients' :
                   activeModule === 'affiliates' ? 'Partenaires' :
                     activeModule === 'payouts' ? 'Versements' :
                       activeModule === 'chats' ? 'Support Chat' :
@@ -2158,6 +2154,8 @@ function AdminDashboard() {
                 </div>
               </motion.div>
             )}
+
+            {activeModule === 'clients' && <AdminClientsModule key="clients" />}
 
             {activeModule === 'affiliates' && (
               <motion.div
@@ -3100,13 +3098,23 @@ function PaymentLinkPage({ linkId }: { linkId: string }) {
 }
 
 export default function App() {
-  const [loginState, setLoginState] = useState<{ role: 'admin' | 'affiliate' | null, user: any }>({ role: null, user: null });
-  const [showLogin, setShowLogin] = useState<'admin' | 'affiliate' | null>(null);
+  const [loginState, setLoginState] = useState<{ role: 'admin' | 'affiliate' | 'client' | null, user: any }>({ role: null, user: null });
+  const [showLogin, setShowLogin] = useState<'admin' | 'affiliate' | 'client' | null>(null);
 
   // Simple routing for payment links
   const urlParams = new URLSearchParams(window.location.search);
   const linkId = urlParams.get('link');
   const pageParams = urlParams.get('page');
+  const clientAction = urlParams.get('client'); // 'login' | 'register'
+
+  if (clientAction === 'register') {
+    return (
+      <ClientOnboarding 
+        onSuccess={() => { window.location.href = '/?client=login'; }}
+        onClose={() => { window.location.href = '/'; }}
+      />
+    );
+  }
 
   if (pageParams === 'about') {
     return (
@@ -3144,6 +3152,23 @@ export default function App() {
         affiliateId={loginState.user.id}
         onLogout={() => setLoginState({ role: null, user: null })}
       />
+    );
+  }
+
+  if (loginState.role === 'client') {
+    return (
+      <ClientPortal
+        initialClient={loginState.user}
+        onLogout={() => setLoginState({ role: null, user: null })}
+      />
+    );
+  }
+
+  if (showLogin === 'client') {
+    return (
+      <div className="relative">
+        <ClientPortal onLogout={() => setShowLogin(null)} />
+      </div>
     );
   }
 
@@ -3193,6 +3218,10 @@ export default function App() {
       <div
         className="fixed bottom-4 right-20 w-8 h-8 opacity-0 hover:opacity-10 transition-opacity cursor-pointer z-[100]"
         onClick={() => setShowLogin('affiliate')}
+      ></div>
+      <div
+        className="fixed bottom-14 right-20 w-8 h-8 opacity-0 hover:opacity-10 transition-opacity cursor-pointer z-[100]"
+        onClick={() => setShowLogin('client')}
       ></div>
       <FloatingWhatsApp />
     </div>

@@ -55,10 +55,12 @@ app.post('/api/affiliates/register', (req, res) => {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
+  const access_code = Math.random().toString(36).substring(2, 8).toUpperCase();
+
   try {
-    const stmt = db.prepare('INSERT INTO affiliates (name, email, phone, method) VALUES (?, ?, ?, ?)');
-    const result = stmt.run(name, email, phone, method);
-    res.json({ id: result.lastInsertRowid, status: 'pending' });
+    const stmt = db.prepare('INSERT INTO affiliates (name, email, phone, method, access_code) VALUES (?, ?, ?, ?, ?)');
+    const result = stmt.run(name, email, phone, method, access_code);
+    res.json({ id: result.lastInsertRowid, status: 'pending', access_code });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -338,6 +340,177 @@ app.post('/api/notifications/:id/read', (req, res) => {
   try {
     db.prepare('UPDATE notifications SET is_read = 1 WHERE id = ?').run(id);
     res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// --- Client Onboarding API ---
+
+// Public endpoint for clients to register themselves
+app.post('/api/clients/register', (req, res) => {
+  const { affiliate_id, name, email, phone } = req.body;
+  if (!name || !phone) return res.status(400).json({ error: 'Name and phone required' });
+  const access_code = Math.random().toString(36).substring(2, 8).toUpperCase();
+  try {
+    const stmt = db.prepare('INSERT INTO clients (affiliate_id, name, email, phone, access_code) VALUES (?, ?, ?, ?, ?)');
+    const result = stmt.run(affiliate_id || null, name, email, phone, access_code);
+    
+    // Create initial project and contract
+    db.prepare('INSERT INTO client_projects (client_id) VALUES (?)').run(result.lastInsertRowid);
+    db.prepare('INSERT INTO contracts (client_id) VALUES (?)').run(result.lastInsertRowid);
+
+    res.json({ id: result.lastInsertRowid, access_code });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Admin creates a client, generating an access code
+app.post('/api/admin/clients', (req, res) => {
+  const { affiliate_id, name, email, phone } = req.body;
+  if (!name || !phone) return res.status(400).json({ error: 'Name and phone required' });
+  const access_code = Math.random().toString(36).substring(2, 8).toUpperCase();
+  try {
+    const stmt = db.prepare('INSERT INTO clients (affiliate_id, name, email, phone, access_code) VALUES (?, ?, ?, ?, ?)');
+    const result = stmt.run(affiliate_id || null, name, email, phone, access_code);
+    
+    // Create initial project and contract
+    db.prepare('INSERT INTO client_projects (client_id) VALUES (?)').run(result.lastInsertRowid);
+    db.prepare('INSERT INTO contracts (client_id) VALUES (?)').run(result.lastInsertRowid);
+
+    res.json({ id: result.lastInsertRowid, access_code });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Admin lists clients
+app.get('/api/admin/clients', (req, res) => {
+  try {
+    const clients = db.prepare('SELECT clients.*, affiliates.name as affiliate_name FROM clients LEFT JOIN affiliates ON clients.affiliate_id = affiliates.id ORDER BY clients.created_at DESC').all();
+    res.json(clients);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Client logs in
+app.post('/api/clients/login', (req, res) => {
+  const { phone, access_code } = req.body;
+  try {
+    const client = db.prepare('SELECT * FROM clients WHERE phone = ? AND access_code = ?').get(phone, access_code);
+    if (client) {
+      res.json({ success: true, user: { ...client, role: 'client' } });
+    } else {
+      res.status(401).json({ error: "Téléphone ou code d'accès incorrect" });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Client Dashboard details
+app.get('/api/clients/:id/dashboard', (req, res) => {
+  const { id } = req.params;
+  try {
+    const client = db.prepare('SELECT * FROM clients WHERE id = ?').get(id);
+    const contract = db.prepare('SELECT * FROM contracts WHERE client_id = ?').get(id);
+    const project = db.prepare('SELECT * FROM client_projects WHERE client_id = ?').get(id);
+    const deliverables = db.prepare('SELECT * FROM client_deliverables WHERE client_id = ? ORDER BY created_at DESC').all(id);
+    res.json({ client, contract, project, deliverables });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Client signs contract
+app.post('/api/clients/:id/contract/sign', (req, res) => {
+  const { id } = req.params;
+  try {
+    db.prepare('UPDATE contracts SET is_signed = 1, signed_at = CURRENT_TIMESTAMP WHERE client_id = ?').run(id);
+    // Automatically trigger Welcome Packet message
+    const welcomeMsg = "Bienvenue dans l'aventure ! Votre contrat est signé. Merci de remplir le questionnaire pour démarrer.";
+    db.prepare("INSERT INTO client_messages (client_id, sender_type, content) VALUES (?, 'admin', ?)").run(id, welcomeMsg);
+    
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Client submits questionnaire
+app.patch('/api/clients/:id/questionnaire', (req, res) => {
+  const { id } = req.params;
+  const { business_details } = req.body;
+  try {
+    db.prepare('UPDATE clients SET business_details = ?, status = ? WHERE id = ?').run(JSON.stringify(business_details), 'active', id);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Client schedules kickoff
+app.patch('/api/clients/:id/schedule', (req, res) => {
+  const { id } = req.params;
+  const { kickoff_date, kickoff_time } = req.body;
+  try {
+    db.prepare('UPDATE client_projects SET kickoff_date = ?, kickoff_time = ? WHERE client_id = ?').run(kickoff_date, kickoff_time, id);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Admin uploads client deliverable
+app.post('/api/clients/:id/deliverable', (req, res) => {
+  const { id } = req.params;
+  const { title, file_url } = req.body;
+  try {
+    db.prepare('INSERT INTO client_deliverables (client_id, title, file_url) VALUES (?, ?, ?)').run(id, title, file_url);
+    const msg = `Un nouveau fichier est disponible: ${title}`;
+    db.prepare("INSERT INTO client_messages (client_id, sender_type, content) VALUES (?, 'admin', ?)").run(id, msg);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Client Messages
+app.get('/api/client-chat/:clientId', (req, res) => {
+  const { clientId } = req.params;
+  try {
+    const messages = db.prepare('SELECT * FROM client_messages WHERE client_id = ? ORDER BY created_at ASC').all(clientId);
+    res.json(messages);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/client-chat', (req, res) => {
+  const { client_id, sender_type, content } = req.body;
+  try {
+    const stmt = db.prepare('INSERT INTO client_messages (client_id, sender_type, content) VALUES (?, ?, ?)');
+    const result = stmt.run(client_id, sender_type, content);
+    const newMessage = db.prepare('SELECT * FROM client_messages WHERE id = ?').get(result.lastInsertRowid);
+    res.json(newMessage);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/admin/client-chats', (req, res) => {
+  try {
+    const clients = db.prepare(`
+      SELECT DISTINCT c.id, c.name, c.phone, 
+      (SELECT content FROM client_messages m WHERE m.client_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message,
+      (SELECT created_at FROM client_messages m WHERE m.client_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message_time
+      FROM clients c
+      JOIN client_messages m ON c.id = m.client_id
+      ORDER BY last_message_time DESC
+    `).all();
+    res.json(clients);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
