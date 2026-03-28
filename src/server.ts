@@ -431,7 +431,7 @@ app.post('/api/clients/:id/contract/sign', (req, res) => {
     db.prepare('UPDATE contracts SET is_signed = 1, signed_at = CURRENT_TIMESTAMP WHERE client_id = ?').run(id);
     // Automatically trigger Welcome Packet message
     const welcomeMsg = "Bienvenue dans l'aventure ! Votre contrat est signé. Merci de remplir le questionnaire pour démarrer.";
-    db.prepare("INSERT INTO client_messages (client_id, sender_type, content) VALUES (?, 'admin', ?)").run(id, welcomeMsg);
+    db.prepare("INSERT INTO client_messages (client_id, room_type, sender_type, content) VALUES (?, 'admin', 'admin', ?)").run(id, welcomeMsg);
     
     res.json({ success: true });
   } catch (error: any) {
@@ -470,18 +470,18 @@ app.post('/api/clients/:id/deliverable', (req, res) => {
   try {
     db.prepare('INSERT INTO client_deliverables (client_id, title, file_url) VALUES (?, ?, ?)').run(id, title, file_url);
     const msg = `Un nouveau fichier est disponible: ${title}`;
-    db.prepare("INSERT INTO client_messages (client_id, sender_type, content) VALUES (?, 'admin', ?)").run(id, msg);
+    db.prepare("INSERT INTO client_messages (client_id, room_type, sender_type, content) VALUES (?, 'admin', 'admin', ?)").run(id, msg);
     res.json({ success: true });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Client Messages
-app.get('/api/client-chat/:clientId', (req, res) => {
-  const { clientId } = req.params;
+// Client Messages by Room
+app.get('/api/client-chat/:clientId/:roomType', (req, res) => {
+  const { clientId, roomType } = req.params;
   try {
-    const messages = db.prepare('SELECT * FROM client_messages WHERE client_id = ? ORDER BY created_at ASC').all(clientId);
+    const messages = db.prepare('SELECT * FROM client_messages WHERE client_id = ? AND room_type = ? ORDER BY created_at ASC').all(clientId, roomType);
     res.json(messages);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -489,10 +489,10 @@ app.get('/api/client-chat/:clientId', (req, res) => {
 });
 
 app.post('/api/client-chat', (req, res) => {
-  const { client_id, sender_type, content } = req.body;
+  const { client_id, room_type, sender_type, content } = req.body;
   try {
-    const stmt = db.prepare('INSERT INTO client_messages (client_id, sender_type, content) VALUES (?, ?, ?)');
-    const result = stmt.run(client_id, sender_type, content);
+    const stmt = db.prepare('INSERT INTO client_messages (client_id, room_type, sender_type, content) VALUES (?, ?, ?, ?)');
+    const result = stmt.run(client_id, room_type || 'admin', sender_type, content);
     const newMessage = db.prepare('SELECT * FROM client_messages WHERE id = ?').get(result.lastInsertRowid);
     res.json(newMessage);
   } catch (error: any) {
@@ -500,16 +500,36 @@ app.post('/api/client-chat', (req, res) => {
   }
 });
 
+// Admin gets list of clients with active chats
 app.get('/api/admin/client-chats', (req, res) => {
   try {
     const clients = db.prepare(`
       SELECT DISTINCT c.id, c.name, c.phone, 
-      (SELECT content FROM client_messages m WHERE m.client_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message,
-      (SELECT created_at FROM client_messages m WHERE m.client_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message_time
+      (SELECT content FROM client_messages m WHERE m.client_id = c.id AND m.room_type = 'admin' ORDER BY created_at DESC LIMIT 1) as last_message,
+      (SELECT created_at FROM client_messages m WHERE m.client_id = c.id AND m.room_type = 'admin' ORDER BY created_at DESC LIMIT 1) as last_message_time
       FROM clients c
       JOIN client_messages m ON c.id = m.client_id
+      WHERE m.room_type = 'admin'
       ORDER BY last_message_time DESC
     `).all();
+    res.json(clients);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Affiliate gets their referred clients
+app.get('/api/affiliates/:id/clients', (req, res) => {
+  const { id } = req.params;
+  try {
+    const clients = db.prepare(`
+      SELECT DISTINCT c.id, c.name, c.phone, c.status, c.created_at,
+      (SELECT content FROM client_messages m WHERE m.client_id = c.id AND m.room_type = 'affiliate' ORDER BY created_at DESC LIMIT 1) as last_message,
+      (SELECT created_at FROM client_messages m WHERE m.client_id = c.id AND m.room_type = 'affiliate' ORDER BY created_at DESC LIMIT 1) as last_message_time
+      FROM clients c
+      WHERE c.affiliate_id = ?
+      ORDER BY c.created_at DESC
+    `).all(id);
     res.json(clients);
   } catch (error: any) {
     res.status(500).json({ error: error.message });

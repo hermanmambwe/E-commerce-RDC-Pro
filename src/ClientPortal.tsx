@@ -11,6 +11,7 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
   const [project, setProject] = useState<any>(null);
   const [deliverables, setDeliverables] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [activeChat, setActiveChat] = useState<'admin' | 'affiliate'>('admin');
 
   const [messageInput, setMessageInput] = useState('');
 
@@ -22,11 +23,16 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
   useEffect(() => {
     if (client) {
       fetchDashboard();
+    }
+  }, [client]);
+
+  useEffect(() => {
+    if (client) {
       fetchMessages();
       const interval = setInterval(fetchMessages, 5000); // Simple polling
       return () => clearInterval(interval);
     }
-  }, [client]);
+  }, [client, activeChat]);
 
   const fetchDashboard = async () => {
     try {
@@ -47,7 +53,7 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
   const fetchMessages = async () => {
     if (!client) return;
     try {
-      const res = await fetch(`/api/client-chat/${client.id}`);
+      const res = await fetch(`/api/client-chat/${client.id}/${activeChat}`);
       const data = await res.json();
       setMessages(data);
     } catch (e) {
@@ -116,7 +122,7 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
       await fetch('/api/client-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ client_id: client.id, sender_type: 'client', content: messageInput })
+        body: JSON.stringify({ client_id: client.id, room_type: activeChat, sender_type: 'client', content: messageInput })
       });
       setMessageInput('');
       fetchMessages();
@@ -294,10 +300,16 @@ export default function ClientPortal({ onLogout, initialClient = null }: { onLog
 
         {/* Right Column: Built-in Messaging */}
         <div className="h-[600px] flex flex-col bg-white rounded-3xl shadow-xl ring-1 ring-slate-200 overflow-hidden sticky top-24">
-          <div className="p-4 bg-slate-900 text-white flex justify-between items-center">
+          <div className="flex border-b border-slate-200 shrink-0">
+             <button onClick={() => setActiveChat('admin')} className={`flex-1 p-3 text-xs font-bold uppercase tracking-widest transition-colors ${activeChat === 'admin' ? 'bg-slate-900 text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}>Équipe Technique</button>
+             {client.affiliate_id && (
+               <button onClick={() => setActiveChat('affiliate')} className={`flex-1 p-3 text-xs font-bold uppercase tracking-widest transition-colors ${activeChat === 'affiliate' ? 'bg-indigo-600 text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}>Mon Partenaire</button>
+             )}
+          </div>
+          <div className={`p-4 ${activeChat === 'admin' ? 'bg-slate-900' : 'bg-indigo-600'} text-white flex justify-between items-center transition-colors`}>
              <div className="flex items-center gap-2">
-               <span className="material-symbols-outlined">support_agent</span>
-               <span className="font-bold text-sm tracking-wide">Chef de Projet</span>
+               <span className="material-symbols-outlined">{activeChat === 'admin' ? 'support_agent' : 'handshake'}</span>
+               <span className="font-bold text-sm tracking-wide">{activeChat === 'admin' ? 'Chef de Projet' : 'Partenaire Conseil'}</span>
              </div>
              <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
           </div>

@@ -8,6 +8,7 @@ import ClientPortal from './ClientPortal';
 import AdminClientsModule from './AdminClientsModule';
 import VaultUI from './VaultUI';
 import ClientOnboarding from './ClientOnboarding';
+import AffiliateClientsModule from './AffiliateClientsModule';
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ days: 2, hours: 14, minutes: 35, seconds: 42 });
@@ -1603,6 +1604,11 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
               )}
             </div>
           </section>
+        </div>
+
+        {/* Affiliate Clients Module */}
+        <div className="mt-8 mb-12">
+          <AffiliateClientsModule affiliateId={affiliateId} />
         </div>
       </div>
 

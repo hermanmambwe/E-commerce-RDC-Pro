@@ -168,12 +168,19 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS client_messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     client_id INTEGER NOT NULL,
-    sender_type TEXT NOT NULL, -- 'admin' or 'client'
+    room_type TEXT NOT NULL DEFAULT 'admin', -- 'admin' or 'affiliate'
+    sender_type TEXT NOT NULL, -- 'admin', 'client', or 'affiliate'
     content TEXT NOT NULL,
     is_read INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (client_id) REFERENCES clients(id)
   )
 `);
+
+try {
+  db.exec(`ALTER TABLE client_messages ADD COLUMN room_type TEXT NOT NULL DEFAULT 'admin'`);
+} catch (e) {
+  // column likely exists
+}
 
 export default db;
