@@ -88,21 +88,32 @@ export default function AffiliateClientsModule({ affiliateId }: { affiliateId: n
                 <p className="text-xs font-bold uppercase">Aucun client</p>
               </div>
             ) : (
-              clients.map(c => (
-                <div 
-                  key={c.id} 
-                  onClick={() => setActiveChatClientId(c.id)}
-                  className={`p-4 border-b border-slate-200 cursor-pointer transition-colors ${activeChatClientId === c.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-100 border-l-4 border-l-transparent'}`}
-                >
-                  <p className="font-bold text-slate-900 text-sm">{c.name}</p>
-                  <div className="flex justify-between items-center mt-1">
-                    <p className="text-xs font-medium text-slate-500">{c.phone}</p>
-                    <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${c.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}`}>
-                      {c.status}
-                    </span>
+              clients.map(c => {
+                const needsNudge = c.status === 'pending';
+                
+                return (
+                  <div 
+                    key={c.id} 
+                    onClick={() => setActiveChatClientId(c.id)}
+                    className={`p-4 border-b border-slate-200 cursor-pointer transition-colors ${activeChatClientId === c.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'hover:bg-slate-100 border-l-4 border-l-transparent'}`}
+                  >
+                    <div className="flex justify-between items-start">
+                      <p className="font-bold text-slate-900 text-sm">{c.name}</p>
+                      {needsNudge && (
+                        <span className="flex items-center gap-1 text-[8px] font-black uppercase text-rose-600 bg-rose-100 px-1.5 py-0.5 rounded animate-pulse">
+                          <span className="material-symbols-outlined text-[10px]">notification_important</span> Relance
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <p className="text-xs font-medium text-slate-500">{c.phone}</p>
+                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${c.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : c.status === 'active' ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-600'}`}>
+                        {c.status}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -141,6 +152,23 @@ export default function AffiliateClientsModule({ affiliateId }: { affiliateId: n
                   </div>
                 ))}
               </div>
+
+              {clients.find(c => c.id === activeChatClientId)?.status === 'pending' && (
+                 <div className="px-4 py-2 bg-rose-50 border-b border-rose-100 flex items-center justify-between shrink-0">
+                   <p className="text-xs font-bold text-rose-800 flex items-center gap-1">
+                     <span className="material-symbols-outlined text-[14px]">warning</span> Action Requise : Relance
+                   </p>
+                   <button 
+                     onClick={() => {
+                        const clientName = clients.find(c => c.id === activeChatClientId)?.name || '';
+                        setMessageInput(`Bonjour ${clientName.split(' ')[0]}, j'ai remarqué que tu n'as pas encore finalisé ton paiement/contrat. As-tu besoin d'aide ?`);
+                     }}
+                     className="text-[10px] font-bold text-rose-700 bg-rose-200/50 hover:bg-rose-200 px-3 py-1 rounded-full transition-colors"
+                   >
+                     Utiliser le script auto
+                   </button>
+                 </div>
+              )}
 
               <form onSubmit={sendMessage} className="p-3 bg-white border-t border-slate-200 flex gap-2 shrink-0">
                 <input 

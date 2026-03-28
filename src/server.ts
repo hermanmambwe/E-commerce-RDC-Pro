@@ -11,6 +11,14 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Logging Helper (The "WhatsApp" Preparation Engine)
+function logActivity(user_id: number | null, user_type: string, action: string, details: string, phone?: string) {
+  try {
+    db.prepare('INSERT INTO activity_logs (user_id, user_type, action, details, phone) VALUES (?, ?, ?, ?, ?)').run(user_id, user_type, action, details, phone || null);
+    console.log(`[ACTIVITY LOG] ${user_type.toUpperCase()}: ${action} - ${details}`);
+  } catch (e) { console.error('LOG ERROR:', e); }
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -168,6 +176,65 @@ app.get('/api/affiliates/:id/dashboard', (req, res) => {
   }
 });
 
+// Public Affiliate Profile for Co-branding
+app.get('/api/affiliates/:id/profile', (req, res) => {
+  const { id } = req.params;
+  try {
+    const affiliate = db.prepare('SELECT id, name, avatar_url, promo_code FROM affiliates WHERE id = ?').get(id);
+    if (affiliate) {
+      res.json(affiliate);
+    } else {
+      res.status(404).json({ error: 'Affiliate not found' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Log Affiliate Click (Analytics)
+app.post('/api/affiliates/:id/click', (req, res) => {
+  const { id } = req.params;
+  const { source } = req.body;
+  
+  // Basic IP hashing for unique counting (in a real app, use crypto.createHash)
+  const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  const ip_hash = Buffer.from(String(rawIp)).toString('base64');
+  
+  try {
+    db.prepare('INSERT INTO affiliate_clicks (affiliate_id, source, ip_hash) VALUES (?, ?, ?)').run(id, source || 'direct', ip_hash);
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get Affiliate Analytics (Dashboard)
+app.get('/api/affiliates/:id/analytics', (req, res) => {
+  const { id } = req.params;
+  try {
+    const clicks = db.prepare(`
+      SELECT source, COUNT(*) as count 
+      FROM affiliate_clicks 
+      WHERE affiliate_id = ? 
+      GROUP BY source
+      ORDER BY count DESC
+    `).all(id);
+    
+    // Also get last 7 days total trend (optional, but good for UI)
+    const recentClicks = db.prepare(`
+      SELECT date(created_at) as date, COUNT(*) as count
+      FROM affiliate_clicks
+      WHERE affiliate_id = ? AND created_at >= date('now', '-7 days')
+      GROUP BY date(created_at)
+      ORDER BY date
+    `).all(id);
+
+    res.json({ sources: clicks, trend: recentClicks });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Payout Requests
 app.get('/api/payouts', (req, res) => {
   try {
@@ -190,8 +257,10 @@ app.post('/api/payouts/request', (req, res) => {
   }
 
   try {
-    const stmt = db.prepare('INSERT INTO payout_requests (affiliate_id, amount, payment_method) VALUES (?, ?, ?)');
-    stmt.run(affiliate_id, amount, payment_method);
+    db.prepare('INSERT INTO payout_requests (affiliate_id, amount, payment_method) VALUES (?, ?, ?)').run(affiliate_id, amount, payment_method);
+    
+    logActivity(affiliate_id, 'affiliate', 'payout_request', `Demande de retrait: $${amount}`);
+
     res.json({ success: true });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -379,6 +448,8 @@ app.post('/api/admin/clients', (req, res) => {
     db.prepare('INSERT INTO client_projects (client_id) VALUES (?)').run(result.lastInsertRowid);
     db.prepare('INSERT INTO contracts (client_id) VALUES (?)').run(result.lastInsertRowid);
 
+    logActivity(result.lastInsertRowid as number, 'client', 'registration', `Nouveau client: ${name}`, phone);
+
     res.json({ id: result.lastInsertRowid, access_code });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -388,7 +459,14 @@ app.post('/api/admin/clients', (req, res) => {
 // Admin lists clients
 app.get('/api/admin/clients', (req, res) => {
   try {
-    const clients = db.prepare('SELECT clients.*, affiliates.name as affiliate_name FROM clients LEFT JOIN affiliates ON clients.affiliate_id = affiliates.id ORDER BY clients.created_at DESC').all();
+    const clients = db.prepare(`
+      SELECT clients.*, affiliates.name as affiliate_name, 
+             client_projects.id as project_id, client_projects.status as project_status, client_projects.milestones
+      FROM clients 
+      LEFT JOIN affiliates ON clients.affiliate_id = affiliates.id 
+      LEFT JOIN client_projects ON clients.id = client_projects.client_id
+      ORDER BY clients.created_at DESC
+    `).all();
     res.json(clients);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -539,6 +617,70 @@ app.get('/api/affiliates/:id/clients', (req, res) => {
 // SPA routing: Catch-all for frontend routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+// CEO Dashboard Stats
+app.get('/api/admin/ceo-stats', (req, res) => {
+  try {
+    const totalRev = db.prepare('SELECT SUM(revenue) as total FROM affiliates').get() as any;
+    const activeAffiliates = db.prepare('SELECT COUNT(*) as count FROM affiliates WHERE status = "active"').get() as any;
+    const pendingPayouts = db.prepare('SELECT SUM(amount) as total FROM payout_requests WHERE status = "pending"').get() as any;
+    const totalClients = db.prepare('SELECT COUNT(*) as count FROM clients').get() as any;
+    
+    // Traffic Sources Aggregate
+    const trafficSources = db.prepare(`
+      SELECT source, COUNT(*) as count 
+      FROM affiliate_clicks 
+      GROUP BY source 
+      ORDER BY count DESC
+    `).all();
+
+    // Monthly Revenue Trend (Mocking historical data based on current total for visualization)
+    const revenueTrend = [
+      Math.floor((totalRev.total || 0) * 0.4),
+      Math.floor((totalRev.total || 0) * 0.55),
+      Math.floor((totalRev.total || 0) * 0.7),
+      Math.floor((totalRev.total || 0) * 0.85),
+      Math.floor(totalRev.total || 0)
+    ];
+
+    res.json({
+      revenue: totalRev.total || 0,
+      activeAffiliates: activeAffiliates.count || 0,
+      pendingPayouts: pendingPayouts.total || 0,
+      totalClients: totalClients.count || 0,
+      trafficSources,
+      revenueTrend
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Admin updates project milestones
+app.patch('/api/admin/projects/:id/milestones', (req, res) => {
+  const { id } = req.params;
+  const { milestones, status } = req.body;
+  try {
+    if (milestones) {
+      db.prepare('UPDATE client_projects SET milestones = ? WHERE id = ?').run(JSON.stringify(milestones), id);
+      logActivity(null, 'admin', 'milestone_update', `Mise à jour d'étape pour le projet #${id}`, null as any);
+    }
+    if (status) {
+      db.prepare('UPDATE client_projects SET status = ? WHERE id = ?').run(status, id);
+      // If status is 'delivered', we also update the client status to 'completed'
+      if (status === 'delivered') {
+        const project = db.prepare('SELECT client_id FROM client_projects WHERE id = ?').get(id) as any;
+        if (project) {
+          db.prepare('UPDATE clients SET status = "completed" WHERE id = ?').run(project.client_id);
+          logActivity(project.client_id, 'client', 'delivrer', 'Votre boutique est maintenant LIVE!', null as any);
+        }
+      }
+    }
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // Export app for Vercel

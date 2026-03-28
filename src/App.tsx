@@ -9,6 +9,15 @@ import AdminClientsModule from './AdminClientsModule';
 import VaultUI from './VaultUI';
 import ClientOnboarding from './ClientOnboarding';
 import AffiliateClientsModule from './AffiliateClientsModule';
+import AffiliateResourcesModule from './AffiliateResourcesModule';
+import AdminCEOModule from './AdminCEOModule';
+
+function calculateAffiliateTier(conversions: number) {
+  if (conversions >= 50) return { name: 'Partenaire Platine', commission: 100, next: null, progress: 100, color: 'from-purple-500 to-fuchsia-600', icon: 'diamond', badgeBg: 'bg-purple-100 text-purple-700' };
+  if (conversions >= 15) return { name: 'Partenaire Or', commission: 75, next: 50, progress: (conversions / 50) * 100, color: 'from-yellow-400 to-amber-500', icon: 'workspace_premium', badgeBg: 'bg-yellow-100 text-yellow-700' };
+  if (conversions >= 5)  return { name: 'Partenaire Argent', commission: 60, next: 15, progress: (conversions / 15) * 100, color: 'from-slate-300 to-slate-400', icon: 'star', badgeBg: 'bg-slate-200 text-slate-700' };
+  return { name: 'Partenaire Bronze', commission: 50, next: 5, progress: (conversions / 5) * 100, color: 'from-amber-700 to-amber-800', icon: 'medal', badgeBg: 'bg-amber-100 text-amber-800' };
+}
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ days: 2, hours: 14, minutes: 35, seconds: 42 });
@@ -183,7 +192,7 @@ function Header({ onLoginClick }: { onLoginClick: () => void }) {
   );
 }
 
-function Hero() {
+function Hero({ affiliateData }: { affiliateData?: any }) {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 1000], [0, 150]);
   const y2 = useTransform(scrollY, [0, 1000], [0, -50]);
@@ -206,13 +215,24 @@ function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="space-y-10"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 text-primary text-sm font-semibold tracking-wide">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              Offre Spéciale Lancement
-            </div>
+            {affiliateData ? (
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-indigo-50 border border-indigo-100 shadow-sm animate-fade-in">
+                 {affiliateData.avatar_url ? (
+                   <img src={affiliateData.avatar_url} alt={affiliateData.name} className="w-8 h-8 rounded-full border-2 border-white shadow-sm object-cover" />
+                 ) : (
+                   <div className="w-8 h-8 rounded-full bg-indigo-200 text-indigo-700 flex items-center justify-center font-bold text-sm shadow-sm">{affiliateData.name.charAt(0)}</div>
+                 )}
+                 <p className="text-indigo-900 text-sm font-bold tracking-tight">Bienvenue, <span className="text-indigo-600">{affiliateData.name}</span> vous invite à découvrir notre technologie.</p>
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 text-primary text-sm font-semibold tracking-wide">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                Offre Spéciale Lancement
+              </div>
+            )}
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-extrabold leading-[1.1] tracking-tight text-slate-900">
               Lancez votre boutique en ligne <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-indigo-600 animate-pulse">automatisée</span> en RDC.
             </h1>
@@ -1128,7 +1148,11 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
     try {
       const res = await fetch(`/api/affiliates/${affiliateId}/dashboard`);
       const json = await res.json();
-      setData(json);
+      
+      const analyticsRes = await fetch(`/api/affiliates/${affiliateId}/analytics`);
+      const analyticsJson = await analyticsRes.json();
+      
+      setData({ ...json, analytics: analyticsJson });
     } catch (err) {
       console.error(err);
     } finally {
@@ -1206,6 +1230,8 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
       />
     );
   }
+
+  const tierInfo = calculateAffiliateTier(affiliate?.conversions || 0);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans pb-20 selection:bg-indigo-100 selection:text-indigo-900">
@@ -1384,7 +1410,32 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
           <p className="text-slate-500 mt-2 font-medium">Consultez vos indicateurs de performance et gérez vos commissions.</p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+          <ExecutiveCard className="p-6">
+            <div className="flex justify-between items-start mb-6">
+              <div className={`w-10 h-10 ${tierInfo.badgeBg} rounded-lg flex items-center justify-center bg-opacity-50`}>
+                <span className="material-symbols-outlined text-xl">{tierInfo.icon}</span>
+              </div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Statut</span>
+            </div>
+            <p className="text-xl font-black text-slate-900 leading-none truncate">{tierInfo.name}</p>
+            <div className="mt-4 pt-4 border-t border-slate-50">
+               {tierInfo.next ? (
+                 <div className="w-full">
+                   <div className="flex justify-between text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+                     <span>Progression</span>
+                     <span>{affiliate?.conversions || 0} / {tierInfo.next}</span>
+                   </div>
+                   <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                     <div className={`h-full bg-gradient-to-r ${tierInfo.color} transition-all duration-1000`} style={{ width: `${tierInfo.progress}%` }}></div>
+                   </div>
+                 </div>
+               ) : (
+                 <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest">Niveau Maximum !</p>
+               )}
+            </div>
+          </ExecutiveCard>
+
           <ExecutiveCard className="p-6">
             <div className="flex justify-between items-start mb-6">
               <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
@@ -1394,7 +1445,7 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
             </div>
             <p className="text-3xl font-black text-slate-900 leading-none">{affiliate?.total_leads || 0}</p>
             <div className="mt-4 pt-4 border-t border-slate-50">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Visites Totales</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Inscriptions Récentes</p>
             </div>
           </ExecutiveCard>
 
@@ -1479,13 +1530,17 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
                     </div>
                   </div>
 
-                  <div className="flex-1 p-6 bg-indigo-600 rounded-2xl text-white shadow-xl shadow-indigo-100">
-                    <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-4">Commission Partenaire</p>
+                  <div className={`flex-1 p-6 bg-gradient-to-br ${tierInfo.color} rounded-2xl text-white shadow-xl`}>
+                    <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-4">Commission Actuelle</p>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-black">$50.00</span>
+                      <span className="text-3xl font-black">${tierInfo.commission}.00</span>
                       <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">par vente</span>
                     </div>
-                    <p className="text-[9px] font-medium text-white/50 mt-4 leading-relaxed">Paiement instantané dès validation de la transaction par l'administration.</p>
+                    {tierInfo.next ? (
+                      <p className="text-[9px] font-medium text-white/80 mt-4 leading-relaxed">Passez au niveau supérieur pour débloquer ${(calculateAffiliateTier(tierInfo.next).commission)} !</p>
+                    ) : (
+                      <p className="text-[9px] font-medium text-white/80 mt-4 leading-relaxed">Vous bénéficiez du taux de commission maximum pour les partenaires exclusifs.</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1502,10 +1557,11 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
           </ExecutiveCard>
         </div>
 
-        {/* Data Sections */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Sales Activity */}
-          <section>
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Data Sections */}
+          <div className="lg:col-span-2 grid gap-8">
+            {/* Sales Activity */}
+            <section>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                 <span className="material-symbols-outlined text-indigo-600">radar</span>
@@ -1604,10 +1660,53 @@ function AffiliateDashboard({ affiliateId, onLogout }: { affiliateId: number, on
               )}
             </div>
           </section>
+          </div>
+
+          {/* Analytics Sidebar */}
+          <div className="space-y-8">
+            <section>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                  <span className="material-symbols-outlined text-indigo-600">bar_chart</span>
+                  Trafic & Sources
+                </h3>
+              </div>
+              <div className="bg-white border text-left border-slate-200 rounded-xl shadow-sm overflow-hidden p-6">
+                 {data?.analytics?.sources?.length === 0 ? (
+                   <div className="text-center py-8 opacity-50">
+                     <span className="material-symbols-outlined text-4xl mb-2">trending_down</span>
+                     <p className="text-xs font-bold uppercase tracking-widest">Aucun clic</p>
+                   </div>
+                 ) : (
+                   <div className="space-y-4">
+                     {data?.analytics?.sources?.map((s: any) => (
+                       <div key={s.source} className="flex items-center justify-between">
+                         <div className="flex items-center gap-2">
+                            <span className={`material-symbols-outlined text-sm ${s.source === 'whatsapp' ? 'text-green-500' : s.source === 'facebook' ? 'text-blue-500' : 'text-slate-400'}`}>
+                              {s.source === 'whatsapp' ? 'forum' : s.source === 'facebook' ? 'thumb_up' : 'link'}
+                            </span>
+                            <span className="font-bold text-sm text-slate-700 capitalize">{s.source}</span>
+                         </div>
+                         <span className="text-xs font-black bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md">{s.count} clics</span>
+                       </div>
+                     ))}
+                   </div>
+                 )}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Marketing Assets / Resources */}
+        <div className="mt-12 bg-white p-8 rounded-[2rem] shadow-xl ring-1 ring-slate-200">
+          <AffiliateResourcesModule 
+            promoCode={affiliate?.promo_code || ''} 
+            refLink={`${window.location.origin}/?ref=${affiliateId}`} 
+          />
         </div>
 
         {/* Affiliate Clients Module */}
-        <div className="mt-8 mb-12">
+        <div className="mt-12 mb-12">
           <AffiliateClientsModule affiliateId={affiliateId} />
         </div>
       </div>
@@ -1972,7 +2071,7 @@ function AdminDashboard() {
     .slice(0, 3);
 
   const menuItems = [
-    { id: 'overview', label: 'Vue d\'Ensemble', icon: 'analytics' },
+    { id: 'overview', label: 'Console CEO', icon: 'command' },
     { id: 'clients', label: 'Onboarding Clients', icon: 'person_add' },
     { id: 'affiliates', label: 'Partenaires', icon: 'groups' },
     { id: 'payouts', label: `Retraits (${payouts.filter(p => p.status === 'pending').length})`, icon: 'payments' },
@@ -2087,77 +2186,7 @@ function AdminDashboard() {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-8"
               >
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <ExecutiveChart data={revenueHistory} title="Chiffre d'Affaires" color="#4f46e5" />
-                  <ExecutiveChart data={conversionHistory} title="Conversions Réseau" color="#0ea5e9" />
-                  <ExecutiveCard className="p-6 flex flex-col justify-between overflow-hidden relative">
-                    <div className="relative z-10">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">État du Système</p>
-                      <div className="mt-4 flex items-center gap-3">
-                        <div className="text-3xl font-bold text-slate-900">{stats.active}</div>
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Optimal</span>
-                      </div>
-                    </div>
-                    <div className="pt-4 border-t border-slate-100 mt-4 relative z-10">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Temps de réponse</p>
-                      <p className="text-xs font-semibold text-slate-900 mt-0.5">24ms (Avg)</p>
-                    </div>
-                    <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-indigo-50/50 rounded-full blur-3xl opacity-50"></div>
-                  </ExecutiveCard>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <ExecutiveCard className="p-8">
-                    <div className="flex justify-between items-center mb-8">
-                      <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-indigo-600 text-lg">workspace_premium</span>
-                        Partenaires d'Élite
-                      </h3>
-                      <button className="text-[10px] font-bold text-indigo-600 hover:text-indigo-700 uppercase tracking-widest">Voir tout</button>
-                    </div>
-                    <div className="space-y-4">
-                      {topPerformers.map((p) => (
-                        <div key={p.id} className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-100">
-                          <div className="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm">
-                            {p.name.charAt(0)}
-                          </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-bold text-slate-900">{p.name}</p>
-                            <p className="text-[10px] font-medium text-slate-500">{p.conversions} conversions</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xs font-bold text-slate-900">${(p.revenue || 0).toLocaleString()}</p>
-                            <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded uppercase tracking-widest">Actif</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </ExecutiveCard>
-
-                  <ExecutiveCard className="p-8">
-                    <div className="flex justify-between items-center mb-8">
-                      <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-indigo-600 text-lg">history_edu</span>
-                        Journal Opérationnel
-                      </h3>
-                    </div>
-                    <div className="space-y-5">
-                      {[
-                        { action: 'Versement validé', details: 'Airtel Money - $420.00', time: 'Il y a 12 min' },
-                        { action: 'Configuration mise à jour', details: 'Module Paramètres', time: 'À l\'instant' },
-                        { action: 'Alerte Système', details: 'Audit de sécurité effectué', time: '10:45 AM' }
-                      ].map((log, i) => (
-                        <div key={i} className="flex gap-4">
-                          <div className="w-1.5 h-1.5 rounded-full bg-slate-200 mt-1.5 shrink-0" />
-                          <div>
-                            <p className="text-xs font-bold text-slate-900">{log.action}</p>
-                            <p className="text-[10px] font-medium text-slate-500 mt-0.5">{log.details} • {log.time}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </ExecutiveCard>
-                </div>
+                <AdminCEOModule />
               </motion.div>
             )}
 
@@ -3106,12 +3135,49 @@ function PaymentLinkPage({ linkId }: { linkId: string }) {
 export default function App() {
   const [loginState, setLoginState] = useState<{ role: 'admin' | 'affiliate' | 'client' | null, user: any }>({ role: null, user: null });
   const [showLogin, setShowLogin] = useState<'admin' | 'affiliate' | 'client' | null>(null);
+  const [affiliateData, setAffiliateData] = useState<any>(null);
 
   // Simple routing for payment links
   const urlParams = new URLSearchParams(window.location.search);
   const linkId = urlParams.get('link');
   const pageParams = urlParams.get('page');
   const clientAction = urlParams.get('client'); // 'login' | 'register'
+  const affiliateRef = urlParams.get('ref');
+  const trafficSource = urlParams.get('src');
+
+  useEffect(() => {
+    if (affiliateRef) {
+      // Store ref in session storage so it persists if they navigate
+      sessionStorage.setItem('affiliateRef', affiliateRef);
+      fetch(`/api/affiliates/${affiliateRef}/profile`)
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data && !data.error) setAffiliateData(data);
+        })
+        .catch(console.error);
+        
+      // Log click only once per session per source
+      const sessionKey = `click_logged_${affiliateRef}_${trafficSource || 'direct'}`;
+      if (!sessionStorage.getItem(sessionKey)) {
+        sessionStorage.setItem(sessionKey, 'true');
+        fetch(`/api/affiliates/${affiliateRef}/click`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: trafficSource || 'direct' })
+        }).catch(console.error);
+      }
+    } else {
+      const storedRef = sessionStorage.getItem('affiliateRef');
+      if (storedRef) {
+        fetch(`/api/affiliates/${storedRef}/profile`)
+          .then(res => res.ok ? res.json() : null)
+          .then(data => {
+            if (data && !data.error) setAffiliateData(data);
+          })
+          .catch(console.error);
+      }
+    }
+  }, [affiliateRef]);
 
   if (clientAction === 'register') {
     return (
@@ -3199,7 +3265,7 @@ export default function App() {
       <CountdownTimer />
       <Header onLoginClick={() => setShowLogin('affiliate')} />
       <main>
-        <Hero />
+        <Hero affiliateData={affiliateData} />
 
         <Partners />
         <HowItWorks />

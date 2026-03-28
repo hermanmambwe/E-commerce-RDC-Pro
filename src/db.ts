@@ -147,6 +147,7 @@ db.exec(`
     client_id INTEGER NOT NULL UNIQUE,
     kickoff_date DATETIME,
     kickoff_time TEXT,
+    milestones TEXT DEFAULT '{"branding": 0, "catalog": 0, "payment": 0, "marketing": 0, "testing": 0, "live": 0}', -- JSON string
     status TEXT DEFAULT 'setup', -- 'setup', 'in_progress', 'delivered'
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (client_id) REFERENCES clients(id)
@@ -177,8 +178,38 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS affiliate_clicks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    affiliate_id INTEGER NOT NULL,
+    source TEXT DEFAULT 'direct', -- e.g. 'whatsapp', 'facebook', 'instagram'
+    ip_hash TEXT, -- hashed IP for basic unique counting
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (affiliate_id) REFERENCES affiliates(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS activity_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    user_type TEXT, -- 'admin', 'affiliate', 'client'
+    action TEXT NOT NULL,
+    details TEXT,
+    phone TEXT,
+    is_notified INTEGER DEFAULT 0, -- flag for WhatsApp engine
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
 try {
   db.exec(`ALTER TABLE client_messages ADD COLUMN room_type TEXT NOT NULL DEFAULT 'admin'`);
+} catch (e) {
+  // column likely exists
+}
+
+try {
+  db.exec(`ALTER TABLE client_projects ADD COLUMN milestones TEXT DEFAULT '{"branding": 0, "catalog": 0, "payment": 0, "marketing": 0, "testing": 0, "live": 0}'`);
 } catch (e) {
   // column likely exists
 }

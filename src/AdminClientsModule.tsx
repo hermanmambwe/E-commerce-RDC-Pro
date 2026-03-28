@@ -15,6 +15,10 @@ export default function AdminClientsModule() {
   const [deliverableTitle, setDeliverableTitle] = useState('');
   const [deliverableUrl, setDeliverableUrl] = useState('');
 
+  // project management state
+  const [managingProject, setManagingProject] = useState<any | null>(null);
+  const [isUpdatingProject, setIsUpdatingProject] = useState(false);
+
   useEffect(() => {
     fetchClients();
   }, []);
@@ -66,6 +70,41 @@ export default function AdminClientsModule() {
     } catch (e) { console.error(e); }
   };
 
+  const handleUpdateMilestone = async (project_id: number, key: string, currentVal: number) => {
+    if (!managingProject) return;
+    const newMilestones = { ...JSON.parse(managingProject.milestones), [key]: currentVal === 1 ? 0 : 1 };
+    
+    setIsUpdatingProject(true);
+    try {
+      const res = await fetch(`/api/admin/projects/${project_id}/milestones`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ milestones: newMilestones })
+      });
+      if (res.ok) {
+        setManagingProject({ ...managingProject, milestones: JSON.stringify(newMilestones) });
+        fetchClients();
+      }
+    } catch (e) { console.error(e); }
+    finally { setIsUpdatingProject(false); }
+  };
+
+  const handleUpdateStatus = async (project_id: number, status: string) => {
+    setIsUpdatingProject(true);
+    try {
+      const res = await fetch(`/api/admin/projects/${project_id}/milestones`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        setManagingProject({ ...managingProject, project_status: status });
+        fetchClients();
+      }
+    } catch (e) { console.error(e); }
+    finally { setIsUpdatingProject(false); }
+  };
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 text-sm">
       <div className="flex justify-between items-center mb-6">
@@ -112,6 +151,56 @@ export default function AdminClientsModule() {
         </div>
       )}
 
+      {managingProject && (
+        <div className="bg-white p-8 rounded-3xl shadow-2xl border border-indigo-100 mb-6 border-l-8 border-l-indigo-600 animate-in fade-in slide-in-from-top duration-300">
+           <div className="flex justify-between items-center mb-6">
+             <div>
+               <h4 className="text-xl font-black text-slate-900 tracking-tight">Gestion du Projet & Roadmap</h4>
+               <p className="text-xs text-slate-500 font-medium">Suivez et validez les étapes de construction pour <span className="text-indigo-600 font-bold">{managingProject.name}</span></p>
+             </div>
+             <button onClick={() => setManagingProject(null)} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400"><span className="material-symbols-outlined">close</span></button>
+           </div>
+
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+             {Object.entries(JSON.parse(managingProject.milestones || '{}')).map(([key, val]) => (
+               <button 
+                key={key} 
+                disabled={isUpdatingProject}
+                onClick={() => handleUpdateMilestone(managingProject.project_id, key, val as number)}
+                className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 relative overflow-hidden group ${val === 1 ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-indigo-200'}`}
+               >
+                 <span className="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">
+                   {key === 'branding' ? 'palette' : key === 'catalog' ? 'inventory' : key === 'payment' ? 'payments' : key === 'marketing' ? 'campaign' : key === 'testing' ? 'app_registration' : 'rocket_launch'}
+                 </span>
+                 <span className="text-[10px] font-black uppercase tracking-widest text-center">{key === 'payment' ? 'Paiement' : key === 'catalog' ? 'Catalogue' : key === 'branding' ? 'Design' : key === 'marketing' ? 'Marketing' : key === 'testing' ? 'Tests' : 'Final'}</span>
+                 {val === 1 && <span className="absolute top-2 right-2 material-symbols-outlined text-sm font-bold">check_circle</span>}
+               </button>
+             ))}
+           </div>
+
+           <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+             <div className="flex-1">
+               <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">État Global du Projet</p>
+               <div className="flex gap-2">
+                 {['setup', 'in_progress', 'delivered'].map((s) => (
+                   <button 
+                     key={s} 
+                     onClick={() => handleUpdateStatus(managingProject.project_id, s)}
+                     className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${managingProject.project_status === s ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-200 hover:bg-slate-50'}`}
+                   >
+                     {s === 'delivered' ? 'Livré / Live' : s === 'in_progress' ? 'En cours' : 'Préparation'}
+                   </button>
+                 ))}
+               </div>
+             </div>
+             <div className="text-right">
+                <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Dernière Action</p>
+                <p className="text-xs font-black text-slate-900">Mise à jour automatique</p>
+             </div>
+           </div>
+        </div>
+      )}
+
       <div className="bg-white border text-left border-slate-200 rounded-xl shadow-sm overflow-hidden">
         <table className="w-full">
           <thead>
@@ -140,6 +229,12 @@ export default function AdminClientsModule() {
                   </code>
                 </td>
                 <td className="p-4 text-right space-x-2">
+                  <button 
+                    onClick={() => setManagingProject(c)} 
+                    className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${managingProject?.id === c.id ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}
+                  >
+                    🛠️ Gérer Projet
+                  </button>
                   <button onClick={() => setSelectedClientId(c.id)} className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded text-xs font-bold">
                     + Livrable
                   </button>
